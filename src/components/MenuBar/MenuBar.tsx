@@ -25,10 +25,10 @@ export function MenuBar({
       <div className="menu-bar-actions">
         <button
           type="button"
-          className={`menu-bar-action ${currentScreen === "entry" ? "is-current" : ""}`}
-          onClick={onOpenEntry}
+          className={`menu-bar-action ${currentScreen === "dashboard" ? "is-current" : ""}`}
+          onClick={onOpenDashboard}
         >
-          Start
+          Dashboard
         </button>
         <button
           type="button"
@@ -39,10 +39,10 @@ export function MenuBar({
         </button>
         <button
           type="button"
-          className={`menu-bar-action ${currentScreen === "dashboard" ? "is-current" : ""}`}
-          onClick={onOpenDashboard}
+          className={`menu-bar-action ${currentScreen === "entry" ? "is-current" : ""}`}
+          onClick={onOpenEntry}
         >
-          Registry
+          About
         </button>
       </div>
     </nav>
