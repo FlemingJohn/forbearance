@@ -1,0 +1,16 @@
+.assumption-quote {
+  padding: var(--space-loose);
+  border: var(--border-frame);
+  box-shadow: var(--shadow-raised);
+  font-size: clamp(1.3rem, 3.6vw, 2rem);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.22;
+  letter-spacing: -0.025em;
+  max-width: 32ch;
+}
+
+.assumption-casualties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-tight);
+}
