@@ -1,0 +1,39 @@
+.stat-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-snug) var(--space-base);
+  background: var(--color-paper);
+  border: var(--border-frame);
+}
+
+.stat-tile-label {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+.stat-tile-value {
+  font-size: 1.45rem;
+  font-weight: var(--font-weight-heavy);
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+}
+
+.stat-tile-note {
+  font-size: var(--font-size-caption);
+  color: var(--color-muted);
+}
+
+.stat-tile--alert {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.stat-tile--alert .stat-tile-label,
+.stat-tile--alert .stat-tile-note {
+  color: var(--color-chrome);
+}
