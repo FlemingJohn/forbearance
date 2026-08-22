@@ -1,0 +1,59 @@
+:root {
+  --color-paper: #ffffff;
+  --color-ink: #000000;
+  --color-chrome: #c9c9c9;
+  --color-chrome-shade: #b0b0b0;
+  --color-muted: #4a4a4a;
+  --color-faint: #6e6e6e;
+
+  --font-family-base: Poppins, "Helvetica Neue", Arial, sans-serif;
+
+  --font-size-caption: 0.72rem;
+  --font-size-label: 0.78rem;
+  --font-size-small: 0.86rem;
+  --font-size-body: 1rem;
+  --font-size-lede: 1.06rem;
+  --font-size-heading: 1.15rem;
+  --font-size-title: clamp(1.7rem, 4.4vw, 2.6rem);
+  --font-size-display: clamp(2.2rem, 6.4vw, 3.8rem);
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-heavy: 800;
+
+  --space-hair: 0.25rem;
+  --space-tight: 0.5rem;
+  --space-snug: 0.75rem;
+  --space-base: 1rem;
+  --space-loose: 1.5rem;
+  --space-wide: 2rem;
+  --space-section: 3rem;
+
+  --border-width-hair: 2px;
+  --border-width-frame: 3px;
+  --border-frame: var(--border-width-frame) solid var(--color-ink);
+  --border-hair: var(--border-width-hair) solid var(--color-ink);
+
+  --shadow-raised: 7px 7px 0 var(--color-ink);
+  --shadow-control: 5px 5px 0 var(--color-ink);
+  --shadow-pressed: 2px 2px 0 var(--color-ink);
+
+  --pattern-sparse: radial-gradient(var(--color-ink) 0.9px, transparent 1px);
+  --pattern-sparse-size: 5px 5px;
+  --pattern-checker: repeating-conic-gradient(
+    var(--color-ink) 0% 25%,
+    transparent 0% 50%
+  );
+  --pattern-checker-size: 4px 4px;
+  --pattern-titlebar: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.22) 0 1px,
+    transparent 1px 3px
+  );
+
+  --layout-max-width: 74rem;
+  --layout-reading-width: 60ch;
+  --control-min-height: 44px;
+}
