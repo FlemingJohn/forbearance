@@ -1,0 +1,15 @@
+.tag {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  border: var(--border-hair);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tag--inverted {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
