@@ -1,0 +1,71 @@
+import type { Market, RegistryTotals } from "@/types";
+
+export const markets: Market[] = [
+  {
+    id: "aave-weth",
+    protocol: "Aave v3",
+    asset: "WETH",
+    livenessScore: 7,
+    medianWaitSeconds: 14,
+    worstCaseWaitSeconds: 112,
+    attemptRatio: 3.1,
+    finding: "healthy",
+  },
+  {
+    id: "aave-wsteth",
+    protocol: "Aave v3",
+    asset: "wstETH",
+    livenessScore: 6,
+    medianWaitSeconds: 22,
+    worstCaseWaitSeconds: 247,
+    attemptRatio: 2.4,
+    finding: "healthy",
+  },
+  {
+    id: "compound-usdc",
+    protocol: "Compound",
+    asset: "USDC",
+    livenessScore: 5,
+    medianWaitSeconds: 68,
+    worstCaseWaitSeconds: 571,
+    attemptRatio: 1.2,
+    finding: "thinning",
+  },
+  {
+    id: "morpho-rseth",
+    protocol: "Morpho",
+    asset: "rsETH",
+    livenessScore: 2,
+    medianWaitSeconds: 1120,
+    worstCaseWaitSeconds: 3735,
+    attemptRatio: 0,
+    finding: "incentive",
+  },
+  {
+    id: "morpho-weeth",
+    protocol: "Morpho",
+    asset: "weETH",
+    livenessScore: 3,
+    medianWaitSeconds: 552,
+    worstCaseWaitSeconds: 2463,
+    attemptRatio: 6.8,
+    finding: "mechanism",
+  },
+  {
+    id: "spark-dai",
+    protocol: "Spark",
+    asset: "DAI",
+    livenessScore: 8,
+    medianWaitSeconds: 9,
+    worstCaseWaitSeconds: 58,
+    attemptRatio: 4,
+    finding: "healthy",
+  },
+];
+
+export const registryTotals: RegistryTotals = {
+  caseFileCount: 1284,
+  exhibitCount: 9610,
+  gasSpentCtc: 4.41,
+  attestationGradeShare: 0.71,
+};
