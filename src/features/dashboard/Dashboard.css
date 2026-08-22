@@ -18,6 +18,36 @@
   gap: var(--space-tight);
 }
 
+.dashboard-invite {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-base);
+  grid-column: 1 / -1;
+  padding: var(--space-base) var(--space-loose);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border: var(--border-frame);
+}
+
+.dashboard-invite-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-hair);
+}
+
+.dashboard-invite-title {
+  font-size: var(--font-size-heading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.02em;
+}
+
+.dashboard-invite-detail {
+  font-size: var(--font-size-small);
+  max-width: 52ch;
+}
+
 @media (max-width: 68rem) {
   .dashboard {
     grid-template-columns: 1fr;
