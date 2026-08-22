@@ -3,33 +3,67 @@
   background-color: var(--color-paper);
   background-image: var(--pattern-sparse);
   background-size: var(--pattern-sparse-size);
-  padding: var(--space-section) var(--space-base);
 }
 
 .landing-inner {
   display: flex;
   flex-direction: column;
   gap: var(--space-loose);
-  max-width: 64rem;
-  margin: 0 auto;
+  padding: var(--space-loose);
 }
 
 .landing-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: var(--space-wide);
+  align-items: center;
+}
+
+.landing-hero-copy {
   display: flex;
   flex-direction: column;
-  gap: var(--space-loose);
+  gap: var(--space-base);
   align-items: flex-start;
 }
 
 .landing-headline {
-  max-width: 18ch;
+  max-width: 16ch;
 }
 
 .landing-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-tight);
+  gap: var(--space-base);
   align-items: center;
+  padding-top: var(--space-tight);
+}
+
+.landing-hero-figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-tight);
+  padding: var(--space-base);
+  border: var(--border-frame);
+  background: var(--color-paper);
+}
+
+.landing-hero-figure-label {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-tight);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+.landing-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-tight);
 }
 
 .landing-proof {
@@ -58,14 +92,25 @@
   font-variant-numeric: tabular-nums;
 }
 
-@media (max-width: 60rem) {
-  .landing-proof {
+@media (max-width: 74rem) {
+  .landing-hero {
     grid-template-columns: 1fr;
   }
 }
 
+@media (max-width: 60rem) {
+  .landing-proof {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-inner {
+    padding: var(--space-base);
+    gap: var(--space-base);
+  }
+}
+
 @media (max-width: 34rem) {
-  .landing {
-    padding: var(--space-wide) var(--space-tight);
+  .landing-inner {
+    padding: var(--space-tight);
   }
 }
