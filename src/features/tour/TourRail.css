@@ -1,0 +1,51 @@
+.tour-rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-base);
+  align-self: start;
+  padding: var(--space-loose);
+  background: var(--color-paper);
+  border: var(--border-frame);
+  box-shadow: var(--shadow-raised);
+}
+
+.tour-rail-title {
+  font-size: var(--font-size-heading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.02em;
+}
+
+.tour-rail-summary {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+}
+
+.tour-rail-detail {
+  font-size: var(--font-size-small);
+  color: var(--color-muted);
+}
+
+.tour-rail-controls {
+  display: flex;
+  gap: var(--space-tight);
+  padding-top: var(--space-snug);
+  border-top: var(--border-hair);
+}
+
+.tour-rail-controls > * {
+  flex: 1;
+}
+
+.tour-rail-skip {
+  align-self: flex-start;
+}
+
+@media (max-width: 60rem) {
+  .tour-rail {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    order: 2;
+    box-shadow: none;
+  }
+}
