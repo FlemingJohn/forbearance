@@ -1,0 +1,53 @@
+.press-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-tight);
+  min-height: var(--control-min-height);
+  padding: var(--space-tight) var(--space-loose);
+  background: var(--color-chrome);
+  border: var(--border-frame);
+  box-shadow: var(--shadow-control);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.press-button:hover:not(:disabled) {
+  background: var(--color-paper);
+}
+
+.press-button:active:not(:disabled) {
+  box-shadow: var(--shadow-pressed);
+  transform: translate(3px, 3px);
+}
+
+.press-button:disabled {
+  color: var(--color-faint);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.press-button--primary {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-size: var(--font-size-body);
+  padding: var(--space-snug) var(--space-wide);
+}
+
+.press-button--primary:hover:not(:disabled) {
+  background: var(--color-muted);
+}
+
+.press-button--quiet {
+  background: transparent;
+  box-shadow: none;
+  border-width: var(--border-width-hair);
+}
+
+.press-button--block {
+  width: 100%;
+}
