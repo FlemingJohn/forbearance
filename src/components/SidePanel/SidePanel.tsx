@@ -8,35 +8,36 @@ import {
 import type { ChainStatus, Market, RegistryTotals } from "@/types";
 import "./SidePanel.css";
 
-export type ScreenName = "dashboard" | "tour" | "about";
-
 interface SidePanelProps {
   status: ChainStatus;
   markets: Market[];
   totals: RegistryTotals;
-  currentScreen: ScreenName;
   selectedMarketId: string;
-  onOpenScreen: (screen: ScreenName) => void;
   onSelectMarket: (marketId: string) => void;
+  onOpenLanding: () => void;
 }
 
 export function SidePanel({
   status,
   markets,
   totals,
-  currentScreen,
   selectedMarketId,
-  onOpenScreen,
   onSelectMarket,
+  onOpenLanding,
 }: SidePanelProps) {
   return (
     <nav className="side-panel">
-      <div className="side-panel-brand">
+      <button
+        type="button"
+        className="side-panel-brand"
+        onClick={onOpenLanding}
+        aria-label="Back to the overview"
+      >
         <span className="side-panel-mark" aria-hidden="true">
           <span />
         </span>
         <span className="side-panel-name">Forbearance</span>
-      </div>
+      </button>
 
       <div className="side-panel-status">
         <span className="side-panel-status-live">
@@ -49,44 +50,13 @@ export function SidePanel({
       </div>
 
       <div className="side-panel-section">
-        <button
-          type="button"
-          className={`side-panel-item ${currentScreen === "dashboard" ? "is-current" : ""}`}
-          onClick={() => onOpenScreen("dashboard")}
-        >
-          Dashboard
-          <span className="side-panel-item-count">
-            {formatCount(totals.caseFileCount)}
-          </span>
-        </button>
-        <button
-          type="button"
-          className={`side-panel-item ${currentScreen === "tour" ? "is-current" : ""}`}
-          onClick={() => onOpenScreen("tour")}
-        >
-          Guided tour
-          <span className="side-panel-item-count">3 min</span>
-        </button>
-        <button
-          type="button"
-          className={`side-panel-item ${currentScreen === "about" ? "is-current" : ""}`}
-          onClick={() => onOpenScreen("about")}
-        >
-          About
-        </button>
-      </div>
-
-      <div className="side-panel-section side-panel-markets">
         <span className="side-panel-heading">Markets</span>
         {markets.map((market) => (
           <button
             key={market.id}
             type="button"
             className={`side-panel-market ${market.id === selectedMarketId ? "is-current" : ""}`}
-            onClick={() => {
-              onSelectMarket(market.id);
-              onOpenScreen("dashboard");
-            }}
+            onClick={() => onSelectMarket(market.id)}
           >
             <span className="side-panel-market-glyph" aria-hidden="true">
               {describeMarketGlyph(market.finding)}
@@ -102,6 +72,10 @@ export function SidePanel({
       </div>
 
       <div className="side-panel-meters">
+        <span className="side-panel-meter-row">
+          <span>Case files</span>
+          <b>{formatCount(totals.caseFileCount)}</b>
+        </span>
         <span className="side-panel-meter-row">
           <span>Exhibits</span>
           <b>{formatCount(totals.exhibitCount)}</b>
