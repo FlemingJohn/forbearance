@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
 import { HonestyStrip } from "@/components/HonestyStrip/HonestyStrip";
 import { SidePanel } from "@/components/SidePanel/SidePanel";
+import { TopBar } from "@/components/TopBar/TopBar";
 import { caseFiles, findCaseFilesByMarket } from "@/data/caseFiles";
 import { chainStatus } from "@/data/chainStatus";
 import { examinerState } from "@/data/examiner";
 import { markets, registryTotals } from "@/data/markets";
 import { Dashboard } from "@/features/dashboard/Dashboard";
 import { LandingPage } from "@/features/landing/LandingPage";
+import { formatBlockHeight } from "@/lib/formatNumber";
 import "./App.css";
 
 const DEFAULT_MARKET_ID = "morpho-rseth";
@@ -23,6 +25,7 @@ function requireCaseFile(caseFileId: string) {
 
 export function App() {
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
+  const [isPanelVisible, setIsPanelVisible] = useState(true);
   const [selectedMarketId, setSelectedMarketId] =
     useState<string>(DEFAULT_MARKET_ID);
 
@@ -51,19 +54,32 @@ export function App() {
     );
   }
 
+  const selectedName = selectedMarket
+    ? `${selectedMarket.protocol} · ${selectedMarket.asset}`
+    : "All markets";
+
   return (
     <div className="app">
-      <div className="app-shell">
-        <SidePanel
-          status={chainStatus}
-          markets={markets}
-          totals={registryTotals}
-          selectedMarketId={selectedMarketId}
-          onSelectMarket={setSelectedMarketId}
-          onOpenLanding={() => setIsDashboardOpen(false)}
+      <SidePanel
+        status={chainStatus}
+        markets={markets}
+        totals={registryTotals}
+        selectedMarketId={selectedMarketId}
+        isVisible={isPanelVisible}
+        onSelectMarket={setSelectedMarketId}
+        onOpenLanding={() => setIsDashboardOpen(false)}
+        onHide={() => setIsPanelVisible(false)}
+      />
+
+      <div className={`app-body ${isPanelVisible ? "has-panel" : ""}`}>
+        <TopBar
+          title={selectedName}
+          meta={`${chainStatus.networkName} · frontier ${formatBlockHeight(chainStatus.attestedFrontier)}`}
+          isPanelVisible={isPanelVisible}
+          onTogglePanel={() => setIsPanelVisible((visible) => !visible)}
         />
 
-        <main className="app-main">
+        <main className="app-content">
           <HonestyStrip status={chainStatus} />
 
           <Dashboard
@@ -75,10 +91,8 @@ export function App() {
             onSelectMarket={setSelectedMarketId}
           />
         </main>
-      </div>
 
-      <footer className="app-footer">
-        <div className="app-footer-inner">
+        <footer className="app-footer">
           <div>
             <h3>Forbearance</h3>
             <p className="text-small">
@@ -89,8 +103,8 @@ export function App() {
           <p className="text-caption">
             BUIDL CTC 2026 Fall · AI track · CC3 Testnet 102031
           </p>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </div>
   );
 }
