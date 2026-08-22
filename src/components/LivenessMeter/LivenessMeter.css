@@ -1,0 +1,20 @@
+.liveness-meter {
+  display: inline-flex;
+  width: 84px;
+  height: 14px;
+  border: var(--border-hair);
+  vertical-align: middle;
+}
+
+.liveness-meter i {
+  flex: 1;
+  border-right: 1px solid var(--color-ink);
+}
+
+.liveness-meter i:last-child {
+  border-right: 0;
+}
+
+.liveness-meter i.is-filled {
+  background: var(--color-ink);
+}
