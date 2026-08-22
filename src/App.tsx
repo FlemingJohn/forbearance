@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { HonestyStrip } from "@/components/HonestyStrip/HonestyStrip";
-import { MenuBar, type ScreenName } from "@/components/MenuBar/MenuBar";
+import { SidePanel, type ScreenName } from "@/components/SidePanel/SidePanel";
 import { caseFiles, findCaseFilesByMarket } from "@/data/caseFiles";
 import { chainStatus } from "@/data/chainStatus";
 import { examinerState } from "@/data/examiner";
@@ -60,24 +60,40 @@ export function App() {
     setTourStepIndex((index) => Math.min(tourSteps.length - 1, index + 1));
   }
 
+  function openScreen(screen: ScreenName) {
+    if (screen === "tour") {
+      startTour();
+      return;
+    }
+
+    setCurrentScreen(screen);
+  }
+
   return (
     <div className="app">
-      <MenuBar
-        currentScreen={currentScreen}
-        onOpenEntry={() => setCurrentScreen("entry")}
-        onOpenTour={startTour}
-        onOpenDashboard={openDashboard}
-      />
+      <div className="app-shell">
+        <SidePanel
+          status={chainStatus}
+          markets={markets}
+          totals={registryTotals}
+          currentScreen={currentScreen}
+          selectedMarketId={selectedMarketId}
+          onOpenScreen={openScreen}
+          onSelectMarket={setSelectedMarketId}
+        />
 
-      <main className="app-desktop">
-        <div className="app-canvas">
+        <main className="app-main">
           <HonestyStrip status={chainStatus} />
 
-          {currentScreen === "entry" && (
-            <EntryScreen
+          {currentScreen === "dashboard" && (
+            <Dashboard
+              markets={markets}
               totals={registryTotals}
+              examiner={examinerState}
+              selectedMarketId={selectedMarketId}
+              selectedCaseFiles={selectedCaseFiles}
+              onSelectMarket={setSelectedMarketId}
               onStartTour={startTour}
-              onBrowseRegistry={openDashboard}
             />
           )}
 
@@ -95,19 +111,15 @@ export function App() {
             />
           )}
 
-          {currentScreen === "dashboard" && (
-            <Dashboard
-              markets={markets}
+          {currentScreen === "about" && (
+            <EntryScreen
               totals={registryTotals}
-              examiner={examinerState}
-              selectedMarketId={selectedMarketId}
-              selectedCaseFiles={selectedCaseFiles}
-              onSelectMarket={setSelectedMarketId}
               onStartTour={startTour}
+              onBrowseRegistry={openDashboard}
             />
           )}
-        </div>
-      </main>
+        </main>
+      </div>
 
       <footer className="app-footer">
         <div className="app-footer-inner">
