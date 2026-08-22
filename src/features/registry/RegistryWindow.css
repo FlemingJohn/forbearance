@@ -1,0 +1,19 @@
+.registry-totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-hair) var(--space-loose);
+  padding-top: var(--space-snug);
+  border-top: var(--border-hair);
+  font-size: var(--font-size-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
+
+.registry-totals b {
+  color: var(--color-ink);
+  font-weight: var(--font-weight-semibold);
+}
+
+.registry-market-name {
+  font-weight: var(--font-weight-semibold);
+}
