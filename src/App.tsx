@@ -24,7 +24,7 @@ function requireCaseFile(caseFileId: string) {
 }
 
 export function App() {
-  const [currentScreen, setCurrentScreen] = useState<ScreenName>("entry");
+  const [currentScreen, setCurrentScreen] = useState<ScreenName>("dashboard");
   const [tourStepIndex, setTourStepIndex] = useState(0);
   const [selectedMarketId, setSelectedMarketId] =
     useState<string>(DEFAULT_MARKET_ID);
@@ -103,6 +103,7 @@ export function App() {
               selectedMarketId={selectedMarketId}
               selectedCaseFiles={selectedCaseFiles}
               onSelectMarket={setSelectedMarketId}
+              onStartTour={startTour}
             />
           )}
         </div>
