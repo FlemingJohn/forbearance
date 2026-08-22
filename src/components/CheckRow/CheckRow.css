@@ -1,0 +1,25 @@
+.check-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-tight);
+  font-size: var(--font-size-small);
+}
+
+.check-row-label {
+  flex: 0 0 auto;
+  font-weight: var(--font-weight-medium);
+}
+
+.check-row-leader {
+  flex: 1;
+  height: 0;
+  border-bottom: 1px dotted var(--color-faint);
+  transform: translateY(-3px);
+}
+
+.check-row-value {
+  flex: 0 0 auto;
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+}
