@@ -5,6 +5,7 @@ import { Window } from "@/components/Window/Window";
 import { formatDuration } from "@/lib/formatDuration";
 import { formatBlockHeight, formatCount, formatUsd } from "@/lib/formatNumber";
 import type { CaseFile, ChainStatus, RegistryTotals } from "@/types";
+import { HowItWorks } from "./HowItWorks";
 import "./LandingPage.css";
 
 interface LandingPageProps {
@@ -33,29 +34,60 @@ export function LandingPage({
       <div className="landing-inner">
         <Window fileName="forbearance">
           <div className="landing-hero">
-            <h1 className="landing-headline">
-              Nobody checks if the watchers are watching.
-            </h1>
+            <div className="landing-hero-copy">
+              <h1 className="landing-headline">
+                Nobody checks if the watchers are watching.
+              </h1>
 
-            <p className="text-lede">
-              Lending protocols assume a liquidator will show up when a loan goes
-              bad. Nobody verifies it. Forbearance proves whether they actually
-              do, using Ethereum transactions anyone can open and check.
-            </p>
+              <p className="text-lede">
+                Lending protocols assume a liquidator will show up when a loan
+                goes bad. Nobody verifies it. Forbearance proves whether they
+                actually do, using Ethereum transactions anyone can open and
+                check.
+              </p>
 
-            <div className="landing-actions">
-              <PressButton onClick={onOpenDashboard} variant="primary">
-                Open the dashboard
-              </PressButton>
-              <span className="text-caption">
-                No wallet. No login. Reads live Ethereum mainnet.
-              </span>
+              <div className="landing-actions">
+                <PressButton onClick={onOpenDashboard} variant="primary">
+                  Open the dashboard
+                </PressButton>
+                <span className="text-caption">
+                  No wallet. No login. Reads live Ethereum mainnet.
+                </span>
+              </div>
             </div>
+
+            <figure className="landing-hero-figure">
+              <figcaption className="landing-hero-figure-label">
+                <span>Morpho rsETH</span>
+                <span>48m 12s unclaimed</span>
+              </figcaption>
+              <SilenceTrack
+                openedAtBlock={silenceCaseFile.openedAtBlock}
+                closedAtBlock={silenceCaseFile.closedAtBlock}
+                attemptBlocks={collectAttemptBlocks(silenceCaseFile)}
+              />
+              <p className="text-caption">
+                One real position. Two proven transactions at either end. Nothing
+                in between.
+              </p>
+            </figure>
           </div>
         </Window>
 
+        <Window fileName="how-it-works">
+          <div className="landing-section-head">
+            <h2>How it works</h2>
+            <span className="text-caption">
+              Ethereum mainnet · proven on Creditcoin
+            </span>
+          </div>
+          <HowItWorks />
+        </Window>
+
         <Window fileName="the-evidence.file">
-          <h2>Two intervals. Same delay. Opposite disease.</h2>
+          <div className="landing-section-head">
+            <h2>Two intervals. Same delay. Opposite disease.</h2>
+          </div>
 
           <div className="landing-proof">
             <div className="landing-proof-column">
