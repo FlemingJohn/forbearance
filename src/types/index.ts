@@ -7,4 +7,4 @@ export type {
   ExaminerDecision,
   ExaminerState,
 } from "./docket";
-export type { ChainStatus, TourPanel, TourStep } from "./tour";
+export type { ChainStatus } from "./chainStatus";
