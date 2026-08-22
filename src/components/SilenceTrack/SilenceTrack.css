@@ -1,0 +1,53 @@
+.silence-track-scroll {
+  overflow-x: auto;
+}
+
+.silence-track {
+  position: relative;
+  min-width: 20rem;
+  height: 46px;
+  background: var(--color-paper);
+  border: var(--border-frame);
+}
+
+.silence-track-rail {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: var(--color-ink);
+}
+
+.silence-track-cap {
+  position: absolute;
+  top: 6px;
+  width: 5px;
+  height: 31px;
+  background: var(--color-ink);
+}
+
+.silence-track-cap--start {
+  left: 5%;
+}
+
+.silence-track-cap--end {
+  right: 5%;
+}
+
+.silence-track-attempt {
+  position: absolute;
+  top: 11px;
+  padding: 0 1px;
+  background: var(--color-paper);
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  transform: translateX(-50%);
+}
+
+.silence-track-caption {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
