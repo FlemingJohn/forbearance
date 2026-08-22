@@ -15,8 +15,18 @@
   display: flex;
   align-items: center;
   gap: var(--space-tight);
-  padding-bottom: var(--space-snug);
+  width: 100%;
+  padding: 0 0 var(--space-snug);
+  background: transparent;
+  border: 0;
   border-bottom: var(--border-frame);
+  text-align: left;
+  cursor: pointer;
+}
+
+.side-panel-brand:hover .side-panel-name {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
 }
 
 .side-panel-mark {
