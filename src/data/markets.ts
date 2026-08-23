@@ -1,71 +1,100 @@
-import type { Market, RegistryTotals } from "@/types";
+import { lendingProtocols } from "@/chain/lendingProtocols";
+import { caseFiles } from "./caseFiles";
+import type { CaseFile, Finding, Market, RegistryTotals } from "@/types";
 
-export const markets: Market[] = [
-  {
-    id: "aave-weth",
-    protocol: "Aave v3",
-    asset: "WETH",
-    livenessScore: 7,
-    medianWaitSeconds: 14,
-    worstCaseWaitSeconds: 112,
-    attemptRatio: 3.1,
-    finding: "healthy",
-  },
-  {
-    id: "aave-wsteth",
-    protocol: "Aave v3",
-    asset: "wstETH",
-    livenessScore: 6,
-    medianWaitSeconds: 22,
-    worstCaseWaitSeconds: 247,
-    attemptRatio: 2.4,
-    finding: "healthy",
-  },
-  {
-    id: "compound-usdc",
-    protocol: "Compound",
-    asset: "USDC",
-    livenessScore: 5,
-    medianWaitSeconds: 68,
-    worstCaseWaitSeconds: 571,
-    attemptRatio: 1.2,
-    finding: "thinning",
-  },
-  {
-    id: "morpho-rseth",
-    protocol: "Morpho",
-    asset: "rsETH",
-    livenessScore: 2,
-    medianWaitSeconds: 1120,
-    worstCaseWaitSeconds: 3735,
-    attemptRatio: 0,
-    finding: "incentive",
-  },
-  {
-    id: "morpho-weeth",
-    protocol: "Morpho",
-    asset: "weETH",
-    livenessScore: 3,
-    medianWaitSeconds: 552,
-    worstCaseWaitSeconds: 2463,
-    attemptRatio: 6.8,
-    finding: "mechanism",
-  },
-  {
-    id: "spark-dai",
-    protocol: "Spark",
-    asset: "DAI",
-    livenessScore: 8,
-    medianWaitSeconds: 9,
-    worstCaseWaitSeconds: 58,
-    attemptRatio: 4,
-    finding: "healthy",
-  },
-];
+const HEALTHY_WAIT_SECONDS = 120;
+const THINNING_WAIT_SECONDS = 420;
+
+function readMedian(values: number[]): number {
+  if (values.length === 0) {
+    return 0;
+  }
+
+  const sorted = [...values].sort((left, right) => left - right);
+  const middle = Math.floor(sorted.length / 2);
+  return sorted[middle] ?? 0;
+}
+
+function scoreLiveness(medianWaitSeconds: number, sampleCount: number): number {
+  if (sampleCount === 0) {
+    return 5;
+  }
+
+  if (medianWaitSeconds <= HEALTHY_WAIT_SECONDS) {
+    return 8;
+  }
+
+  if (medianWaitSeconds <= THINNING_WAIT_SECONDS) {
+    return 5;
+  }
+
+  return 2;
+}
+
+function readFinding(marketCaseFiles: CaseFile[]): Finding {
+  if (marketCaseFiles.length === 0) {
+    return "healthy";
+  }
+
+  const hasMechanismFailure = marketCaseFiles.some(
+    (caseFile) => caseFile.finding === "mechanism",
+  );
+
+  if (hasMechanismFailure) {
+    return "mechanism";
+  }
+
+  const hasIncentiveFailure = marketCaseFiles.some(
+    (caseFile) => caseFile.finding === "incentive",
+  );
+
+  return hasIncentiveFailure ? "incentive" : "thinning";
+}
+
+function buildMarket(protocolId: string, protocol: string, asset: string): Market {
+  const marketCaseFiles = caseFiles.filter(
+    (caseFile) => caseFile.marketId === protocolId,
+  );
+
+  const waits = marketCaseFiles.map((caseFile) => caseFile.silenceSeconds);
+  const medianWaitSeconds = readMedian(waits);
+  const worstCaseWaitSeconds = waits.length > 0 ? Math.max(...waits) : 0;
+
+  const totalAttempts = marketCaseFiles.reduce(
+    (total, caseFile) => total + caseFile.attemptCount,
+    0,
+  );
+
+  return {
+    id: protocolId,
+    protocol,
+    asset,
+    livenessScore: scoreLiveness(medianWaitSeconds, marketCaseFiles.length),
+    medianWaitSeconds,
+    worstCaseWaitSeconds,
+    attemptRatio:
+      marketCaseFiles.length > 0 ? totalAttempts / marketCaseFiles.length : 0,
+    finding: readFinding(marketCaseFiles),
+  };
+}
+
+export const markets: Market[] = lendingProtocols.map((protocol) =>
+  buildMarket(protocol.id, protocol.protocol, protocol.asset),
+);
 
 export const registryTotals: RegistryTotals = {
-  caseFileCount: 1284,
-  exhibitCount: 9610,
-  gasSpentCtc: 4.41,
-  attestationGradeShare: 0.71,
+  caseFileCount: caseFiles.length,
+  exhibitCount: caseFiles.reduce(
+    (total, caseFile) => total + caseFile.exhibits.length,
+    0,
+  ),
+  gasSpentCtc: caseFiles.reduce(
+    (total, caseFile) => total + caseFile.continuityHashCount * 0.00000029,
+    0,
+  ),
+  attestationGradeShare:
+    caseFiles.length === 0
+      ? 0
+      : caseFiles.filter((caseFile) => caseFile.evidenceGrade === "attestation")
+          .length / caseFiles.length,
 };
