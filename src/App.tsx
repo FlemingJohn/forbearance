@@ -10,6 +10,7 @@ import { markets, registryTotals } from "@/data/markets";
 import { Dashboard } from "@/features/dashboard/Dashboard";
 import { LandingPage } from "@/features/landing/LandingPage";
 import { useChainStatus } from "@/hooks/useChainStatus";
+import { useExposure } from "@/hooks/useExposure";
 import "./App.css";
 
 const DEFAULT_MARKET_ID = markets[0]?.id ?? "";
@@ -20,6 +21,7 @@ export function App() {
   const [selectedMarketId, setSelectedMarketId] =
     useState<string>(DEFAULT_MARKET_ID);
   const chainStatus = useChainStatus();
+  const { wallet, report: exposure, connect } = useExposure();
 
   const silenceCaseFile = useMemo(
     () => findFirstCaseFileByFinding("incentive"),
@@ -76,6 +78,9 @@ export function App() {
             market={selectedMarket}
             caseFiles={selectedCaseFiles}
             examiner={examinerState}
+            wallet={wallet}
+            exposure={exposure}
+            onConnectWallet={connect}
           />
         </main>
       </div>
