@@ -1,18 +1,30 @@
 import { GradeCard } from "@/components/GradeCard/GradeCard";
 import { Panel } from "@/components/Panel/Panel";
-import { CaseFileWindow } from "@/features/caseFile/CaseFileWindow";
+import { EvidenceList } from "@/features/evidence/EvidenceList";
 import { ExaminerPanel } from "@/features/examiner/ExaminerPanel";
+import { ExposurePanel } from "@/features/exposure/ExposurePanel";
 import { describeRating, listRatingReasons } from "@/lib/describeRating";
 import type { CaseFile, ExaminerState, Market } from "@/types";
+import type { ExposureReport, WalletState } from "@/types/exposure";
 import "./Dashboard.css";
 
 interface DashboardProps {
   market: Market | undefined;
   caseFiles: CaseFile[];
   examiner: ExaminerState;
+  wallet: WalletState;
+  exposure: ExposureReport;
+  onConnectWallet: () => void;
 }
 
-export function Dashboard({ market, caseFiles, examiner }: DashboardProps) {
+export function Dashboard({
+  market,
+  caseFiles,
+  examiner,
+  wallet,
+  exposure,
+  onConnectWallet,
+}: DashboardProps) {
   if (!market) {
     return null;
   }
@@ -36,12 +48,8 @@ export function Dashboard({ market, caseFiles, examiner }: DashboardProps) {
 
       <div className="dashboard-split">
         <div className="dashboard-column">
-          <span className="dashboard-section-label">The evidence</span>
-
           {caseFiles.length > 0 ? (
-            caseFiles.map((caseFile) => (
-              <CaseFileWindow key={caseFile.id} caseFile={caseFile} />
-            ))
+            <EvidenceList caseFiles={caseFiles} />
           ) : (
             <Panel title="Nothing filed against this market">
               <p className="text-small">
@@ -53,6 +61,11 @@ export function Dashboard({ market, caseFiles, examiner }: DashboardProps) {
         </div>
 
         <div className="dashboard-column">
+          <ExposurePanel
+            wallet={wallet}
+            report={exposure}
+            onConnect={onConnectWallet}
+          />
           <span className="dashboard-section-label">Who rated it</span>
           <ExaminerPanel examiner={examiner} />
         </div>
