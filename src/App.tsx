@@ -2,40 +2,33 @@ import { useMemo, useState } from "react";
 import { SidePanel } from "@/components/SidePanel/SidePanel";
 import { TopBar } from "@/components/TopBar/TopBar";
 import {
-  connectWallet,
-  readInitialWalletState,
-  switchToTestnet,
-} from "@/chain/connectWallet";
-import { caseFiles, findCaseFilesByMarket } from "@/data/caseFiles";
-import { chainStatus } from "@/data/chainStatus";
+  findCaseFilesByMarket,
+  findFirstCaseFileByFinding,
+} from "@/data/caseFiles";
 import { examinerState } from "@/data/examiner";
 import { markets, registryTotals } from "@/data/markets";
 import { Dashboard } from "@/features/dashboard/Dashboard";
 import { LandingPage } from "@/features/landing/LandingPage";
-import type { WalletState } from "@/types/wallet";
+import { useChainStatus } from "@/hooks/useChainStatus";
 import "./App.css";
 
-const DEFAULT_MARKET_ID = "morpho-rseth";
-
-function requireCaseFile(caseFileId: string) {
-  const caseFile = caseFiles.find((candidate) => candidate.id === caseFileId);
-
-  if (!caseFile) {
-    throw new Error(`Case file ${caseFileId} is missing from the registry`);
-  }
-
-  return caseFile;
-}
+const DEFAULT_MARKET_ID = markets[0]?.id ?? "";
 
 export function App() {
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const [isPanelVisible, setIsPanelVisible] = useState(true);
   const [selectedMarketId, setSelectedMarketId] =
     useState<string>(DEFAULT_MARKET_ID);
-  const [wallet, setWallet] = useState<WalletState>(readInitialWalletState);
+  const chainStatus = useChainStatus();
 
-  const silenceCaseFile = useMemo(() => requireCaseFile("case-8f2a"), []);
-  const attemptsCaseFile = useMemo(() => requireCaseFile("case-71bd"), []);
+  const silenceCaseFile = useMemo(
+    () => findFirstCaseFileByFinding("incentive"),
+    [],
+  );
+  const attemptsCaseFile = useMemo(
+    () => findFirstCaseFileByFinding("mechanism") ?? silenceCaseFile,
+    [silenceCaseFile],
+  );
 
   const selectedMarket = useMemo(
     () => markets.find((market) => market.id === selectedMarketId),
@@ -47,17 +40,7 @@ export function App() {
     [selectedMarketId],
   );
 
-  async function requestWalletConnection() {
-    setWallet((current) => ({ ...current, status: "connecting" }));
-    setWallet(await connectWallet());
-  }
-
-  async function requestNetworkSwitch() {
-    await switchToTestnet();
-    setWallet(await connectWallet());
-  }
-
-  if (!isDashboardOpen) {
+  if (!isDashboardOpen && silenceCaseFile && attemptsCaseFile) {
     return (
       <LandingPage
         silenceCaseFile={silenceCaseFile}
@@ -84,11 +67,8 @@ export function App() {
       <div className={`app-body ${isPanelVisible ? "has-panel" : ""}`}>
         <TopBar
           status={chainStatus}
-          wallet={wallet}
           isPanelVisible={isPanelVisible}
           onTogglePanel={() => setIsPanelVisible((visible) => !visible)}
-          onConnectWallet={requestWalletConnection}
-          onSwitchNetwork={requestNetworkSwitch}
         />
 
         <main className="app-content">
@@ -96,8 +76,6 @@ export function App() {
             market={selectedMarket}
             caseFiles={selectedCaseFiles}
             examiner={examinerState}
-            wallet={wallet}
-            onFileEvidence={requestWalletConnection}
           />
         </main>
       </div>
