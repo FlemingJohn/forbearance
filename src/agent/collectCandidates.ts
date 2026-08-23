@@ -1,13 +1,12 @@
+import { buildInterval } from "@/chain/buildInterval";
 import type { ChainClients } from "@/chain/createProviders";
-import { findLiquidationsAcrossProtocols } from "@/chain/findLiquidations";
 import { lendingProtocols } from "@/chain/lendingProtocols";
 import { readAttestedFrontier } from "@/chain/readChainInfo";
 import type { IntervalCandidate } from "@/types/examiner";
 
 const SEARCH_WINDOW_BLOCKS = 900;
 const BLOCKS_BEHIND_FRONTIER = 5;
-const SECONDS_PER_BLOCK = 12;
-const ASSUMED_OPPORTUNITY_BLOCKS = 40;
+const OPPORTUNITY_WINDOW_BLOCKS = 40;
 const BOUNTY_CTC = 50;
 
 export async function collectCandidates(
@@ -21,28 +20,56 @@ export async function collectCandidates(
 
   const toBlock = frontier.height - BLOCKS_BEHIND_FRONTIER;
   const fromBlock = toBlock - SEARCH_WINDOW_BLOCKS;
+  const candidates: IntervalCandidate[] = [];
 
-  const liquidations = await findLiquidationsAcrossProtocols(
-    clients.ethereumProvider,
-    lendingProtocols,
-    fromBlock,
-    toBlock,
-  );
+  for (const protocol of lendingProtocols) {
+    if (candidates.length >= wantedCount) {
+      break;
+    }
 
-  return liquidations.slice(0, wantedCount).map((liquidation, index) => ({
-    id: `interval-${liquidation.blockHeight}-${liquidation.transactionIndex}`,
-    marketId: liquidation.protocolId,
-    marketName: liquidation.protocolName,
-    openedAtBlock: liquidation.blockHeight - ASSUMED_OPPORTUNITY_BLOCKS,
-    closedAtBlock: liquidation.blockHeight,
-    silenceSeconds: ASSUMED_OPPORTUNITY_BLOCKS * SECONDS_PER_BLOCK,
-    attemptCount: 0,
-    rewardUsd: 0,
-    respondentCount: 0,
-    evidenceGrade: "attestation",
-    continuityHashCount: 0,
-    filingCostCtc: 0,
-    bountyCtc: BOUNTY_CTC + index * 0,
-    transactionHashes: [liquidation.transactionHash],
-  }));
+    const logs = await clients.ethereumProvider
+      .getLogs({
+        address: protocol.address,
+        topics: [protocol.liquidationTopic],
+        fromBlock,
+        toBlock,
+      })
+      .catch(() => []);
+
+    for (const log of logs) {
+      if (candidates.length >= wantedCount) {
+        break;
+      }
+
+      const interval = await buildInterval(
+        clients.ethereumProvider,
+        protocol,
+        log,
+        log.blockNumber - OPPORTUNITY_WINDOW_BLOCKS,
+      );
+
+      candidates.push({
+        id: `interval-${interval.closedAtBlock}-${log.transactionIndex}`,
+        marketId: interval.protocolId,
+        marketName: interval.protocolName,
+        openedAtBlock: interval.openedAtBlock,
+        closedAtBlock: interval.closedAtBlock,
+        silenceSeconds: interval.silenceSeconds,
+        attemptCount: interval.attemptCount,
+        seizedAmount: interval.seizedAmount,
+        seizedSymbol: interval.seizedSymbol,
+        respondentCount: interval.respondentCount,
+        evidenceGrade: "attestation",
+        continuityHashCount: 0,
+        filingCostCtc: 0,
+        bountyCtc: BOUNTY_CTC,
+        transactionHashes: [
+          interval.closingTransactionHash,
+          ...interval.attemptTransactionHashes,
+        ],
+      });
+    }
+  }
+
+  return candidates;
 }
