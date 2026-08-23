@@ -10,12 +10,13 @@ html {
 
 body {
   margin: 0;
-  background: var(--color-paper);
-  color: var(--color-ink);
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-body);
+  background: var(--surface-page);
+  color: var(--text-body);
+  font-family: var(--font-body);
+  font-size: var(--type-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 h1,
@@ -31,37 +32,43 @@ h1,
 h2,
 h3,
 h4 {
+  color: var(--text-strong);
+  font-family: var(--font-display);
   text-wrap: balance;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.022em;
+  line-height: 1.15;
 }
 
 h1 {
-  font-size: var(--font-size-display);
-  font-weight: var(--font-weight-heavy);
-  line-height: 1.02;
+  font-size: var(--type-display);
+  font-weight: var(--weight-bold);
+  line-height: 1.03;
+  letter-spacing: -0.035em;
 }
 
 h2 {
-  font-size: var(--font-size-title);
-  font-weight: var(--font-weight-heavy);
-  line-height: 1.08;
+  font-size: var(--type-title);
+  font-weight: var(--weight-semibold);
 }
 
 h3 {
-  font-size: var(--font-size-heading);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--type-heading);
+  font-weight: var(--weight-semibold);
 }
 
 p {
-  max-width: var(--layout-reading-width);
+  max-width: var(--reading-width);
 }
 
 a {
-  color: var(--color-ink);
-  font-weight: var(--font-weight-semibold);
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
+  color: var(--accent);
+  font-weight: var(--weight-medium);
+  text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
   text-underline-offset: 3px;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
 }
 
 button {
@@ -76,8 +83,14 @@ ol {
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-ink);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
+  border-radius: var(--radius-sharp);
+}
+
+::selection {
+  background: var(--accent-wash);
+  color: var(--text-strong);
 }
 
 @media (prefers-reduced-motion: reduce) {
