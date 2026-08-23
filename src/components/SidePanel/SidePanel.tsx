@@ -1,14 +1,19 @@
 import { BrandMark } from "@/components/BrandMark/BrandMark";
 import { GradeBadge } from "@/components/GradeBadge/GradeBadge";
+import { PressButton } from "@/components/PressButton/PressButton";
 import { describeRating } from "@/lib/describeRating";
-import { formatCtc } from "@/lib/formatNumber";
+import { formatCtc, shortenHash } from "@/lib/formatNumber";
 import type { ExaminerState, Market } from "@/types";
+import type { ExposureReport, WalletState } from "@/types/exposure";
 import "./SidePanel.css";
 
 interface SidePanelProps {
   markets: Market[];
   examiner: ExaminerState;
   selectedMarketId: string;
+  wallet: WalletState;
+  exposure: ExposureReport;
+  onConnectWallet: () => void;
   isVisible: boolean;
   onSelectMarket: (marketId: string) => void;
   onOpenLanding: () => void;
@@ -19,6 +24,9 @@ export function SidePanel({
   markets,
   examiner,
   selectedMarketId,
+  wallet,
+  exposure,
+  onConnectWallet,
   isVisible,
   onSelectMarket,
   onOpenLanding,
@@ -74,6 +82,33 @@ export function SidePanel({
               </button>
             );
           })}
+        </div>
+
+        <div className="side-panel-wallet">
+          {wallet.status === "connected" ? (
+            <>
+              <span className="side-panel-heading">Your exposure</span>
+              <span className="side-panel-wallet-address">
+                {shortenHash(wallet.address ?? "")}
+              </span>
+              <span className="side-panel-wallet-note">
+                {exposure.unsafeCount > 0
+                  ? `${exposure.unsafeCount} position in an unsafe market`
+                  : "no unsafe exposure"}
+              </span>
+            </>
+          ) : (
+            <PressButton
+              onClick={onConnectWallet}
+              variant="secondary"
+              isFullWidth
+              isDisabled={wallet.status === "unavailable"}
+            >
+              {wallet.status === "unavailable"
+                ? "No wallet found"
+                : "Check my exposure"}
+            </PressButton>
+          )}
         </div>
 
         <div className="side-panel-examiner">
