@@ -1,24 +1,20 @@
+import { Panel } from "@/components/Panel/Panel";
 import { StatTile } from "@/components/StatTile/StatTile";
-import { TabBar } from "@/components/TabBar/TabBar";
 import { Tag } from "@/components/Tag/Tag";
 import { CaseFileWindow } from "@/features/caseFile/CaseFileWindow";
 import { ExaminerPanel } from "@/features/examiner/ExaminerPanel";
 import { describeFinding } from "@/lib/describeFinding";
 import { formatWaitClock } from "@/lib/formatDuration";
-import { formatCount, formatRatio } from "@/lib/formatNumber";
+import { formatRatio } from "@/lib/formatNumber";
 import type { CaseFile, ExaminerState, Market } from "@/types";
 import type { WalletState } from "@/types/wallet";
 import "./Dashboard.css";
-
-export type DashboardTab = "evidence" | "examiner";
 
 interface DashboardProps {
   market: Market | undefined;
   caseFiles: CaseFile[];
   examiner: ExaminerState;
   wallet: WalletState;
-  currentTab: DashboardTab;
-  onSelectTab: (tab: DashboardTab) => void;
   onFileEvidence: () => void;
 }
 
@@ -27,8 +23,6 @@ export function Dashboard({
   caseFiles,
   examiner,
   wallet,
-  currentTab,
-  onSelectTab,
   onFileEvidence,
 }: DashboardProps) {
   if (!market) {
@@ -36,20 +30,17 @@ export function Dashboard({
   }
 
   const finding = describeFinding(market.finding);
-  const filingCount = examiner.candidates.filter(
-    (candidate) => candidate.decision === "file",
-  ).length;
+  const hasCaseFiles = caseFiles.length > 0;
 
   return (
-    <div className="dashboard">
+    <div className="dashboard" key={market.id}>
       <div className="dashboard-header">
         <span className="dashboard-market">
           {market.protocol} · {market.asset}
         </span>
-        <Tag isInverted={finding.isFailure}>{finding.label}</Tag>
+        <Tag tone={finding.tone}>{finding.label}</Tag>
+        <p className="dashboard-plain">{finding.plainLanguage}</p>
       </div>
-
-      <p className="text-small">{finding.plainLanguage}</p>
 
       <div className="dashboard-stats">
         <StatTile
@@ -66,7 +57,7 @@ export function Dashboard({
           label="Worst wait"
           value={formatWaitClock(market.worstCaseWaitSeconds)}
           note="longest proven silence"
-          isAlert={finding.isFailure}
+          tone={finding.isFailure ? "watch" : "neutral"}
         />
         <StatTile
           label="Attempt ratio"
@@ -76,50 +67,36 @@ export function Dashboard({
               ? "nobody tried at all"
               : "tries per opportunity"
           }
+          tone={market.finding === "mechanism" ? "alarm" : "neutral"}
         />
       </div>
 
-      <TabBar
-        tabs={[
-          {
-            id: "evidence",
-            label: "Evidence",
-            count: formatCount(caseFiles.length),
-          },
-          {
-            id: "examiner",
-            label: "Examiner",
-            count: `${filingCount} to file`,
-          },
-        ]}
-        currentTabId={currentTab}
-        onSelectTab={(tabId) => onSelectTab(tabId as DashboardTab)}
-      />
-
-      <div className="dashboard-panel">
-        {currentTab === "evidence" &&
-          (caseFiles.length > 0 ? (
+      <div className="dashboard-split">
+        <div className="dashboard-column">
+          {hasCaseFiles ? (
             caseFiles.map((caseFile) => (
               <CaseFileWindow key={caseFile.id} caseFile={caseFile} />
             ))
           ) : (
-            <div className="dashboard-empty">
-              <h3>No case files filed</h3>
-              <p className="text-small">
-                Liquidators arrive fast enough here that no interval crossed the
-                filing threshold. Pick Morpho rsETH or Morpho weETH to read a
-                filed case.
-              </p>
-            </div>
-          ))}
+            <Panel title="No case files filed">
+              <div className="dashboard-empty">
+                <p className="text-small">
+                  Liquidators arrive fast enough here that no interval crossed
+                  the filing threshold. Pick Morpho rsETH or Morpho weETH in the
+                  side panel to read a filed case.
+                </p>
+              </div>
+            </Panel>
+          )}
+        </div>
 
-        {currentTab === "examiner" && (
+        <div className="dashboard-column">
           <ExaminerPanel
             examiner={examiner}
             wallet={wallet}
             onFileEvidence={onFileEvidence}
           />
-        )}
+        </div>
       </div>
     </div>
   );
