@@ -47,7 +47,7 @@ export function readChainSettings(): ChainSettings {
     ),
     ethereumRpcUrl: readSetting(
       "VITE_ETHEREUM_RPC_URL",
-      "https://ethereum-rpc.publicnode.com",
+      "https://rpc.flashbots.net",
     ),
     proofBuilderUrl: readSetting(
       "VITE_PROOF_BUILDER_URL",
