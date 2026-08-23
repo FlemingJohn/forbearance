@@ -1,6 +1,5 @@
 import { CheckRow } from "@/components/CheckRow/CheckRow";
 import { ExplorerLink } from "@/components/ExplorerLink/ExplorerLink";
-import { Panel } from "@/components/Panel/Panel";
 import { SilenceTrack } from "@/components/SilenceTrack/SilenceTrack";
 import { Tag } from "@/components/Tag/Tag";
 import { describeFinding } from "@/lib/describeFinding";
@@ -27,11 +26,14 @@ export function CaseFileWindow({ caseFile }: CaseFileWindowProps) {
   const caption = `${formatDuration(caseFile.silenceSeconds)} · ${formatCount(caseFile.attemptCount)} attempts proven · ${formatCount(caseFile.respondentCount)} eligible respondents`;
 
   return (
-    <Panel
-      title={`Case ${caseFile.reference}`}
-      action={<Tag tone={finding.tone}>{finding.label}</Tag>}
-    >
-      <div className="case-file">
+    <div className="case-file">
+      <div className="case-file-head">
+        <Tag tone={finding.tone}>{finding.label}</Tag>
+        <span className="case-file-opening">
+          opened by {caseFile.openingFeedLabel}
+        </span>
+      </div>
+
         <SilenceTrack
           openedAtBlock={caseFile.openedAtBlock}
           closedAtBlock={caseFile.closedAtBlock}
@@ -67,7 +69,6 @@ export function CaseFileWindow({ caseFile }: CaseFileWindowProps) {
           blockHeight={closingExhibit.blockHeight}
         />
 
-      </div>
-    </Panel>
+    </div>
   );
 }
