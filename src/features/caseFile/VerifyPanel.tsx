@@ -63,7 +63,7 @@ export function VerifyPanel({
     <div className="verify-panel">
       <div className="verify-panel-head">
         <span className="verify-panel-title">
-          Check this yourself, live on chain
+          Check this proof yourself
         </span>
         <PressButton
           onClick={() => verify(transactionHash, blockHeight)}
@@ -111,7 +111,7 @@ export function VerifyPanel({
 
       <p className={`verify-panel-message ${messageTone}`}>
         {result.stage === "idle"
-          ? "Runs a read only call against the precompile. No wallet, no gas."
+          ? "Re-runs the proof against Creditcoin, live."
           : result.message}
       </p>
     </div>
