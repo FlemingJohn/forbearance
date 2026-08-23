@@ -1,37 +1,28 @@
 .examiner {
   display: flex;
   flex-direction: column;
-  gap: var(--space-loose);
-}
-
-.examiner-head {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: var(--space-base);
-  align-items: start;
-}
-
-.examiner-title {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-hair);
+  gap: var(--gap-base);
 }
 
 .examiner-model {
-  font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.1em;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-hair);
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-faint);
+  color: var(--accent);
 }
 
 .examiner-purse {
-  display: flex;
-  gap: var(--space-loose);
-  padding: var(--space-snug) var(--space-base);
-  border: var(--border-frame);
-  background: var(--color-ink);
-  color: var(--color-paper);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-base);
+  padding: var(--gap-base);
+  border-radius: var(--radius-soft);
+  background: var(--surface-inverse);
+  color: var(--text-onDark);
 }
 
 .examiner-purse-item {
@@ -41,94 +32,120 @@
 }
 
 .examiner-purse-label {
-  font-size: var(--font-size-caption);
-  letter-spacing: 0.09em;
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-chrome);
+  color: var(--shade-cyan);
 }
 
 .examiner-purse-value {
-  font-size: 1.15rem;
-  font-weight: var(--font-weight-bold);
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: var(--weight-bold);
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
-.examiner-economics {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  border: var(--border-frame);
-}
-
-.examiner-economic {
+.examiner-rules {
   display: flex;
   flex-direction: column;
-  gap: var(--space-hair);
-  padding: var(--space-base);
-  border-right: var(--border-frame);
+  gap: var(--gap-tight);
 }
 
-.examiner-economic:last-child {
-  border-right: 0;
+.examiner-rule {
+  display: flex;
+  gap: var(--gap-tight);
+  font-size: var(--type-caption);
+  color: var(--text-muted);
 }
 
-.examiner-economic-term {
-  font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
+.examiner-rule b {
+  flex: 0 0 auto;
+  color: var(--text-strong);
+  font-weight: var(--weight-semibold);
 }
 
-.examiner-economic-detail {
-  font-size: var(--font-size-caption);
-  color: var(--color-muted);
-  max-width: none;
+.examiner-candidates {
+  display: flex;
+  flex-direction: column;
 }
 
-.examiner-decision {
-  font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-faint);
+.examiner-candidate {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: var(--gap-snug);
+  padding: var(--gap-snug) 0;
+  border-bottom: 1px solid var(--line-hair);
+}
+
+.examiner-candidate:last-child {
+  border-bottom: 0;
+}
+
+.examiner-candidate-name {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.examiner-candidate-market {
+  font-size: var(--type-small);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.examiner-candidate-meta {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--text-muted);
+}
+
+.examiner-candidate-score {
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+.examiner-action {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-tight);
+  padding-top: var(--gap-base);
+  border-top: 1px solid var(--line-hair);
 }
 
 .examiner-learning {
   display: flex;
   flex-direction: column;
-  gap: var(--space-tight);
-  padding: var(--space-base);
-  border: var(--border-frame);
-  border-left-width: 8px;
+  gap: var(--gap-hair);
+  padding: var(--gap-snug);
+  border-radius: var(--radius-sharp);
+  background: var(--accent-wash);
 }
 
 .examiner-learning-label {
-  font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.1em;
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.09em;
   text-transform: uppercase;
+  color: var(--accent-strong);
+}
+
+.examiner-learning p {
+  font-size: var(--type-caption);
+  color: var(--text-body);
+  max-width: none;
 }
 
 .examiner-shift {
-  font-size: var(--font-size-small);
-  font-weight: var(--font-weight-semibold);
-  font-variant-numeric: tabular-nums;
-}
-
-@media (max-width: 60rem) {
-  .examiner-head {
-    grid-template-columns: 1fr;
-  }
-
-  .examiner-economics {
-    grid-template-columns: 1fr;
-  }
-
-  .examiner-economic {
-    border-right: 0;
-    border-bottom: var(--border-frame);
-  }
-
-  .examiner-economic:last-child {
-    border-bottom: 0;
-  }
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--accent-strong);
 }
