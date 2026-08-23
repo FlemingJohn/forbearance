@@ -1,3 +1,4 @@
+import { BrandMark } from "@/components/BrandMark/BrandMark";
 import { PressButton } from "@/components/PressButton/PressButton";
 import { ShaderBackground } from "@/components/ShaderBackground/ShaderBackground";
 import { SilenceTrack } from "@/components/SilenceTrack/SilenceTrack";
@@ -36,6 +37,11 @@ export function LandingPage({
         <span className="landing-hero-veil" aria-hidden="true" />
 
         <div className="landing-hero-inner">
+          <span className="landing-brand">
+            <BrandMark size={34} />
+            <span className="landing-brand-name">Forbearance</span>
+          </span>
+
           <span className="landing-eyebrow">
             <span className="landing-eyebrow-pip" aria-hidden="true" />
             Reading Ethereum mainnet · block{" "}
