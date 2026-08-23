@@ -2,50 +2,64 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-tight);
-  min-height: var(--control-min-height);
-  padding: var(--space-tight) var(--space-loose);
-  background: var(--color-chrome);
-  border: var(--border-frame);
-  box-shadow: var(--shadow-control);
-  font-size: var(--font-size-small);
-  font-weight: var(--font-weight-semibold);
+  gap: var(--gap-tight);
+  min-height: var(--tap-target);
+  padding: 0 var(--gap-loose);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sharp);
+  font-family: var(--font-body);
+  font-size: var(--type-small);
+  font-weight: var(--weight-semibold);
   text-decoration: none;
   cursor: pointer;
-  transition: background 120ms ease;
-}
-
-.press-button:hover:not(:disabled) {
-  background: var(--color-paper);
-}
-
-.press-button:active:not(:disabled) {
-  box-shadow: var(--shadow-pressed);
-  transform: translate(3px, 3px);
-}
-
-.press-button:disabled {
-  color: var(--color-faint);
-  box-shadow: none;
-  cursor: not-allowed;
-  opacity: 0.6;
+  transition:
+    background var(--ease-settle),
+    border-color var(--ease-settle),
+    color var(--ease-settle);
 }
 
 .press-button--primary {
-  background: var(--color-ink);
-  color: var(--color-paper);
-  font-size: var(--font-size-body);
-  padding: var(--space-snug) var(--space-wide);
+  background: var(--accent);
+  color: #ffffff;
 }
 
 .press-button--primary:hover:not(:disabled) {
-  background: var(--color-muted);
+  background: var(--accent-strong);
 }
 
-.press-button--quiet {
+.press-button--secondary {
+  background: var(--surface-raised);
+  border-color: var(--line-firm);
+  color: var(--text-strong);
+}
+
+.press-button--secondary:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.press-button--onDark {
+  background: var(--shade-cyan);
+  color: var(--shade-teal);
+}
+
+.press-button--onDark:hover:not(:disabled) {
+  background: var(--shade-ice);
+}
+
+.press-button--ghost {
   background: transparent;
-  box-shadow: none;
-  border-width: var(--border-width-hair);
+  color: var(--text-muted);
+  padding: 0 var(--gap-snug);
+}
+
+.press-button--ghost:hover:not(:disabled) {
+  color: var(--accent);
+}
+
+.press-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .press-button--block {
