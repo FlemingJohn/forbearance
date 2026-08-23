@@ -2,6 +2,7 @@ import { formatUnits } from "ethers";
 import type { JsonRpcProvider, Log } from "ethers";
 import { decodeLiquidation } from "./decodeLiquidation";
 import { findFailedAttempts } from "./findFailedAttempts";
+import { findOpeningEvent } from "./findOpeningEvent";
 import type { LendingProtocol } from "./lendingProtocols";
 import { readTokenDetail } from "./readTokenDecimals";
 
@@ -15,6 +16,9 @@ export interface ProvenInterval {
   openedAtBlock: number;
   silenceSeconds: number;
   closingTransactionHash: string;
+  openingTransactionHash: string;
+  openingFeedLabel: string;
+  wasOpeningMeasured: boolean;
   attemptTransactionHashes: string[];
   attemptCount: number;
   seizedAmount: number;
@@ -27,10 +31,12 @@ export async function buildInterval(
   ethereumProvider: JsonRpcProvider,
   protocol: LendingProtocol,
   liquidationLog: Log,
-  openedAtBlock: number,
 ): Promise<ProvenInterval> {
   const detail = decodeLiquidation(protocol.id, liquidationLog);
   const closedAtBlock = liquidationLog.blockNumber;
+
+  const opening = await findOpeningEvent(ethereumProvider, closedAtBlock);
+  const openedAtBlock = opening.blockHeight;
 
   const token = await readTokenDetail(
     ethereumProvider,
@@ -58,6 +64,9 @@ export async function buildInterval(
     openedAtBlock,
     silenceSeconds: (closedAtBlock - openedAtBlock) * SECONDS_PER_BLOCK,
     closingTransactionHash: liquidationLog.transactionHash,
+    openingTransactionHash: opening.transactionHash,
+    openingFeedLabel: opening.feedLabel,
+    wasOpeningMeasured: opening.wasMeasured,
     attemptTransactionHashes: attempts.map((attempt) => attempt.transactionHash),
     attemptCount: attempts.length,
     seizedAmount: Number(formatUnits(detail.seizedAmount, token.decimals)),
