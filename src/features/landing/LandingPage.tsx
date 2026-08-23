@@ -43,21 +43,22 @@ export function LandingPage({
           </span>
 
           <h1 className="landing-headline">
-            Nobody checks if the watchers are watching.
+            Credit ratings for DeFi lending markets.
           </h1>
 
           <p className="landing-subhead">
-            Lending protocols assume a liquidator will show up when a loan goes
-            bad. Nobody verifies it. Forbearance proves whether they actually do,
-            using Ethereum transactions anyone can open and check.
+            Before you lend, you should know whether anyone will actually
+            liquidate a bad position. We rate every market from real Ethereum
+            transactions, proven on Creditcoin, and an AI analyst issues the
+            grade.
           </p>
 
           <div className="landing-actions">
             <PressButton onClick={onOpenDashboard} variant="onDark">
-              Open the dashboard
+              See the ratings
             </PressButton>
             <span className="landing-hero-note">
-              No wallet, no login, nothing to install.
+              Live Ethereum data. Nothing to install.
             </span>
           </div>
         </div>
@@ -66,18 +67,18 @@ export function LandingPage({
       <div className="landing-body">
         <section>
           <div className="landing-section-head">
-            <h2>Two intervals. Same delay. Opposite disease.</h2>
+            <h2>What a rating is built from</h2>
             <p>
-              Only one liquidator can close a position, so proving who finally
-              closed it proves everyone else declined until that moment. What
-              separates the two cases is whether anyone tried.
+              Every grade comes from measured delay on real positions. A market
+              where nobody arrives is priced differently from one where they
+              arrive and fail.
             </p>
           </div>
 
           <div className="landing-compare">
             <article className="landing-card">
               <div className="landing-card-head">
-                <span className="landing-card-title">Incentive failure</span>
+                <span className="landing-card-title">Nobody arrived</span>
                 <span className="landing-card-market">
                   {silenceCaseFile.marketName}
                 </span>
@@ -88,17 +89,15 @@ export function LandingPage({
                 attemptBlocks={collectAttemptBlocks(silenceCaseFile)}
               />
               <p>
-                Empty because nothing happened.{" "}
-                {formatDuration(silenceCaseFile.silenceSeconds)} in which{" "}
-                {formatCount(silenceCaseFile.respondentCount)} liquidators saw
-                the position and walked past it. The reward was not worth
-                claiming.
+                {formatDuration(silenceCaseFile.silenceSeconds)} with a bad
+                position open and not one liquidator acting. Lending here is
+                riskier than the protocol admits.
               </p>
             </article>
 
             <article className="landing-card">
               <div className="landing-card-head">
-                <span className="landing-card-title">Mechanism failure</span>
+                <span className="landing-card-title">They tried and failed</span>
                 <span className="landing-card-market">
                   {attemptsCaseFile.marketName}
                 </span>
@@ -109,9 +108,9 @@ export function LandingPage({
                 attemptBlocks={collectAttemptBlocks(attemptsCaseFile)}
               />
               <p>
-                Every mark is a proven failed attempt. They tried{" "}
-                {formatCount(attemptsCaseFile.attemptCount)} times and the call
-                kept reverting. The reward was fine. The mechanism is broken.
+                {formatCount(attemptsCaseFile.attemptCount)} liquidation calls
+                that reverted. The incentive worked, the contract did not. A
+                different problem, and a different rating.
               </p>
             </article>
           </div>
@@ -119,11 +118,10 @@ export function LandingPage({
 
         <section>
           <div className="landing-section-head">
-            <h2>How it works</h2>
+            <h2>How a rating is issued</h2>
             <p>
-              Checking a fact on Creditcoin is free. Putting it on the record
-              costs gas, and gas rises as evidence ages. That tension is what the
-              Examiner spends its budget solving.
+              Nothing here is a survey or an opinion poll. Each step reads real
+              chain data and the result is checkable by anyone.
             </p>
           </div>
 
@@ -141,8 +139,8 @@ export function LandingPage({
 
         <footer className="landing-foot">
           <span>
-            {formatCount(totals.caseFileCount)} case files ·{" "}
-            {formatCount(totals.exhibitCount)} exhibits sealed
+            {formatCount(totals.caseFileCount)} rated intervals ·{" "}
+            {formatCount(totals.exhibitCount)} proven transactions
           </span>
           <span>BUIDL CTC 2026 Fall · AI track · CC3 Testnet 102031</span>
         </footer>
