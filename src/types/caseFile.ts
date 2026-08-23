@@ -25,9 +25,11 @@ export interface CaseFile {
   closedAtClock: string;
   silenceSeconds: number;
   attemptCount: number;
-  rewardIgnoredUsd: number;
+  seizedAmount: number;
+  seizedSymbol: string;
   respondentCount: number;
   evidenceGrade: EvidenceGrade;
+  continuityHashCount: number;
   filedBy: string;
   exhibits: Exhibit[];
 }
