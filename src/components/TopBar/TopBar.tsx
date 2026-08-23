@@ -1,3 +1,4 @@
+import { ShaderBackground } from "@/components/ShaderBackground/ShaderBackground";
 import { WalletButton } from "@/components/WalletButton/WalletButton";
 import { formatBlockHeight } from "@/lib/formatNumber";
 import type { ChainStatus } from "@/types";
@@ -23,34 +24,39 @@ export function TopBar({
 }: TopBarProps) {
   return (
     <header className="top-bar">
-      <button
-        type="button"
-        className="top-bar-toggle"
-        onClick={onTogglePanel}
-        aria-label={isPanelVisible ? "Hide the markets" : "Show the markets"}
-        aria-expanded={isPanelVisible}
-      >
-        <span />
-        <span />
-        <span />
-      </button>
+      <ShaderBackground className="top-bar-shader" />
+      <span className="top-bar-veil" aria-hidden="true" />
 
-      <span className="top-bar-live">
-        <span className="top-bar-pip" aria-hidden="true" />
-        {status.isLive ? "LIVE" : "CACHED"}
-      </span>
+      <div className="top-bar-inner">
+        <button
+          type="button"
+          className="top-bar-toggle"
+          onClick={onTogglePanel}
+          aria-label={isPanelVisible ? "Hide the markets" : "Show the markets"}
+          aria-expanded={isPanelVisible}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
 
-      <span className="top-bar-meta">
-        {status.networkName} · block{" "}
-        {formatBlockHeight(status.attestedFrontier)} · proven on CC3 Testnet
-      </span>
+        <span className="top-bar-status">
+          <span className="top-bar-pip" aria-hidden="true" />
+          {status.isLive ? "LIVE" : "CACHED"}
+        </span>
 
-      <div className="top-bar-actions">
-        <WalletButton
-          wallet={wallet}
-          onConnect={onConnectWallet}
-          onSwitchNetwork={onSwitchNetwork}
-        />
+        <span className="top-bar-meta">
+          {status.networkName} · block{" "}
+          {formatBlockHeight(status.attestedFrontier)} · verified on CC3 Testnet
+        </span>
+
+        <div className="top-bar-actions">
+          <WalletButton
+            wallet={wallet}
+            onConnect={onConnectWallet}
+            onSwitchNetwork={onSwitchNetwork}
+          />
+        </div>
       </div>
     </header>
   );
