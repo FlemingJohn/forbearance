@@ -1,0 +1,37 @@
+.exposure-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-tight) var(--gap-base);
+  padding: var(--gap-snug) var(--gap-base);
+  border-radius: var(--radius-soft);
+  border: 1px solid;
+}
+
+.exposure-banner-title {
+  font-family: var(--font-display);
+  font-size: var(--type-body);
+  font-weight: var(--weight-semibold);
+}
+
+.exposure-banner-note {
+  font-size: var(--type-caption);
+}
+
+.exposure-banner--unsafe {
+  background: var(--signal-alarm-wash);
+  border-color: color-mix(in srgb, var(--signal-alarm) 32%, transparent);
+  color: var(--signal-alarm);
+}
+
+.exposure-banner--caution {
+  background: var(--signal-watch-wash);
+  border-color: color-mix(in srgb, var(--signal-watch) 32%, transparent);
+  color: var(--signal-watch);
+}
+
+.exposure-banner--safe {
+  background: var(--signal-calm-wash);
+  border-color: color-mix(in srgb, var(--signal-calm) 32%, transparent);
+  color: var(--signal-calm);
+}
