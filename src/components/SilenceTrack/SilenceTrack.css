@@ -1,53 +1,87 @@
-.silence-track-scroll {
-  overflow-x: auto;
+.silence-track {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-tight);
 }
 
-.silence-track {
-  position: relative;
-  min-width: 20rem;
-  height: 46px;
-  background: var(--color-paper);
-  border: var(--border-frame);
+.silence-track-ends {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gap-base);
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--text-muted);
 }
 
 .silence-track-rail {
+  position: relative;
+  height: 64px;
+  border-radius: var(--radius-sharp);
+  background: var(--surface-page);
+  border: 1px solid var(--line-hair);
+  overflow: hidden;
+}
+
+.silence-track-span {
   position: absolute;
-  top: 20px;
-  right: 0;
-  left: 0;
-  height: 3px;
-  background: var(--color-ink);
+  top: 50%;
+  left: 4%;
+  right: 4%;
+  height: 1px;
+  background: var(--line-firm);
 }
 
 .silence-track-cap {
   position: absolute;
-  top: 6px;
-  width: 5px;
-  height: 31px;
-  background: var(--color-ink);
+  top: 14px;
+  bottom: 14px;
+  width: 3px;
+  border-radius: var(--radius-round);
+  background: var(--accent);
 }
 
 .silence-track-cap--start {
-  left: 5%;
+  left: 4%;
 }
 
 .silence-track-cap--end {
-  right: 5%;
+  right: 4%;
 }
 
 .silence-track-attempt {
   position: absolute;
-  top: 11px;
-  padding: 0 1px;
-  background: var(--color-paper);
-  font-size: 0.95rem;
-  font-weight: var(--font-weight-bold);
-  line-height: 1;
-  transform: translateX(-50%);
+  top: 50%;
+  width: 15px;
+  height: 15px;
+  transform: translate(-50%, -50%);
+  color: var(--signal-alarm);
+}
+
+.silence-track--incentive .silence-track-rail {
+  background:
+    repeating-linear-gradient(
+      135deg,
+      transparent 0 7px,
+      var(--signal-watch-wash) 7px 8px
+    ),
+    var(--surface-raised);
+}
+
+.silence-track--incentive .silence-track-cap {
+  background: var(--signal-watch);
+}
+
+.silence-track--mechanism .silence-track-cap {
+  background: var(--signal-alarm);
 }
 
 .silence-track-caption {
-  font-size: var(--font-size-small);
-  font-weight: var(--font-weight-medium);
-  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+  color: var(--text-body);
+}
+
+.silence-track-caption strong {
+  color: var(--text-strong);
+  font-weight: var(--weight-medium);
 }
