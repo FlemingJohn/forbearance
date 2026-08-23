@@ -1,0 +1,95 @@
+[
+  {
+    "id": "case-25815709-57",
+    "reference": "0xa26b…a212",
+    "marketId": "aave-v3-pool",
+    "marketName": "Aave v3 · Ethereum Pool",
+    "finding": "incentive",
+    "openedAtBlock": 25815669,
+    "closedAtBlock": 25815709,
+    "openedAtClock": "12:13",
+    "closedAtClock": "12:21",
+    "silenceSeconds": 480,
+    "attemptCount": 0,
+    "seizedAmount": 0.5147966809584202,
+    "seizedSymbol": "units",
+    "respondentCount": 1,
+    "evidenceGrade": "checkpoint",
+    "continuityHashCount": 100,
+    "filedBy": "Examiner-01",
+    "exhibits": [
+      {
+        "id": "0xa26b93c6973563fb1407aeac5a0d23278379b1dd9ea5f0af7922951ffe04a212-close",
+        "role": "close",
+        "blockHeight": 25815709,
+        "transactionIndex": 57,
+        "transactionHash": "0xa26b93c6973563fb1407aeac5a0d23278379b1dd9ea5f0af7922951ffe04a212",
+        "eventName": "LiquidationCall",
+        "succeeded": true,
+        "sealed": true
+      }
+    ]
+  },
+  {
+    "id": "case-25815913-38",
+    "reference": "0x8e84…212a",
+    "marketId": "morpho-blue",
+    "marketName": "Morpho · Blue",
+    "finding": "incentive",
+    "openedAtBlock": 25815873,
+    "closedAtBlock": 25815913,
+    "openedAtClock": "12:54",
+    "closedAtClock": "13:02",
+    "silenceSeconds": 480,
+    "attemptCount": 0,
+    "seizedAmount": 426636.2807005383,
+    "seizedSymbol": "units",
+    "respondentCount": 1,
+    "evidenceGrade": "attestation",
+    "continuityHashCount": 10,
+    "filedBy": "Examiner-01",
+    "exhibits": [
+      {
+        "id": "0x8e84f9a2c8b31a1d1942b55be68d6f3bc08e939542aaa7ed9738f702df40212a-close",
+        "role": "close",
+        "blockHeight": 25815913,
+        "transactionIndex": 38,
+        "transactionHash": "0x8e84f9a2c8b31a1d1942b55be68d6f3bc08e939542aaa7ed9738f702df40212a",
+        "eventName": "Liquidate",
+        "succeeded": true,
+        "sealed": true
+      }
+    ]
+  },
+  {
+    "id": "case-25816010-64",
+    "reference": "0xc61c…bd43",
+    "marketId": "morpho-blue",
+    "marketName": "Morpho · Blue",
+    "finding": "incentive",
+    "openedAtBlock": 25815970,
+    "closedAtBlock": 25816010,
+    "openedAtClock": "13:14",
+    "closedAtClock": "13:22",
+    "silenceSeconds": 480,
+    "attemptCount": 0,
+    "seizedAmount": 5.449298e-12,
+    "seizedSymbol": "units",
+    "respondentCount": 1,
+    "evidenceGrade": "attestation",
+    "continuityHashCount": 10,
+    "filedBy": "Examiner-01",
+    "exhibits": [
+      {
+        "id": "0xc61c414e5b8bcac24919c33a74b5b4c543d6f429c5ee8d35120e9657462ebd43-close",
+        "role": "close",
+        "blockHeight": 25816010,
+        "transactionIndex": 64,
+        "transactionHash": "0xc61c414e5b8bcac24919c33a74b5b4c543d6f429c5ee8d35120e9657462ebd43",
+        "eventName": "Liquidate",
+        "succeeded": true,
+        "sealed": true
+      }
+    ]
+  }
+]
