@@ -11,7 +11,6 @@ import {
 } from "../src/chain/readChainInfo";
 
 const SEARCH_WINDOW_BLOCKS = 900;
-const OPPORTUNITY_WINDOW_BLOCKS = 40;
 const SECONDS_PER_BLOCK = 12;
 
 function toClock(blockHeight: number): string {
@@ -47,7 +46,6 @@ async function run() {
         clients.ethereumProvider,
         protocol,
         log,
-        log.blockNumber - OPPORTUNITY_WINDOW_BLOCKS,
       );
 
       const bounds = await readAttestationBounds(
@@ -76,7 +74,23 @@ async function run() {
         evidenceGrade: readEvidenceGrade(bounds),
         continuityHashCount: countContinuityHashes(bounds),
         filedBy: "Examiner-01",
+        openingFeedLabel: interval.openingFeedLabel,
+        wasOpeningMeasured: interval.wasOpeningMeasured,
         exhibits: [
+          ...(interval.openingTransactionHash
+            ? [
+                {
+                  id: `${interval.openingTransactionHash}-open`,
+                  role: "open",
+                  blockHeight: interval.openedAtBlock,
+                  transactionIndex: 0,
+                  transactionHash: interval.openingTransactionHash,
+                  eventName: "AnswerUpdated",
+                  succeeded: true,
+                  sealed: true,
+                },
+              ]
+            : []),
           {
             id: `${log.transactionHash}-close`,
             role: "close",
