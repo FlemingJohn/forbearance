@@ -1,37 +1,24 @@
 .app {
   min-height: 100vh;
-  background-color: var(--color-paper);
-  background-image: var(--pattern-sparse);
-  background-size: var(--pattern-sparse-size);
+  background: var(--surface-page);
 }
 
 .app-body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  transition: padding-left 160ms ease;
+  transition: padding-left var(--ease-settle);
 }
 
 .app-body.has-panel {
-  padding-left: var(--side-panel-width);
+  padding-left: var(--rail-width);
 }
 
 .app-content {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-loose);
-  padding: var(--space-loose);
-}
-
-.app-footer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--space-base);
-  padding: var(--space-loose);
-  border-top: var(--border-frame);
-  background: var(--color-paper);
+  padding: var(--gap-loose);
+  max-width: 92rem;
+  width: 100%;
 }
 
 @media (max-width: 60rem) {
@@ -40,17 +27,12 @@
   }
 
   .app-content {
-    padding: var(--space-base);
-    gap: var(--space-base);
+    padding: var(--gap-base);
   }
 }
 
 @media (max-width: 34rem) {
   .app-content {
-    padding: var(--space-tight);
-  }
-
-  .app-footer {
-    padding: var(--space-base) var(--space-tight);
+    padding: var(--gap-snug);
   }
 }
