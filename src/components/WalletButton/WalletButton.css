@@ -1,0 +1,41 @@
+.wallet-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-tight);
+  min-height: 34px;
+  padding: 0 var(--space-snug);
+  background: var(--color-paper);
+  border: var(--border-frame);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.wallet-button:hover:not(:disabled) {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.wallet-button:disabled {
+  color: var(--color-faint);
+  cursor: not-allowed;
+}
+
+.wallet-button.is-connected {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.wallet-button.is-connected:hover {
+  background: var(--color-muted);
+}
+
+.wallet-button-pip {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: currentColor;
+}
