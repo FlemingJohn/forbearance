@@ -1,17 +1,11 @@
-import { describeMarketGlyph } from "@/lib/describeMarketGlyph";
-import {
-  formatBlockHeight,
-  formatCount,
-  formatCtc,
-  formatPercent,
-} from "@/lib/formatNumber";
-import type { ChainStatus, Market, RegistryTotals } from "@/types";
+import { describeFinding } from "@/lib/describeFinding";
+import { formatCtc } from "@/lib/formatNumber";
+import type { ExaminerState, Market } from "@/types";
 import "./SidePanel.css";
 
 interface SidePanelProps {
-  status: ChainStatus;
   markets: Market[];
-  totals: RegistryTotals;
+  examiner: ExaminerState;
   selectedMarketId: string;
   isVisible: boolean;
   onSelectMarket: (marketId: string) => void;
@@ -20,15 +14,18 @@ interface SidePanelProps {
 }
 
 export function SidePanel({
-  status,
   markets,
-  totals,
+  examiner,
   selectedMarketId,
   isVisible,
   onSelectMarket,
   onOpenLanding,
   onHide,
 }: SidePanelProps) {
+  const filingCount = examiner.candidates.filter(
+    (candidate) => candidate.decision === "file",
+  ).length;
+
   return (
     <>
       {isVisible && (
@@ -36,7 +33,7 @@ export function SidePanel({
           type="button"
           className="side-panel-scrim"
           onClick={onHide}
-          aria-label="Close the side panel"
+          aria-label="Close the markets panel"
         />
       )}
 
@@ -49,60 +46,48 @@ export function SidePanel({
           className="side-panel-brand"
           onClick={onOpenLanding}
         >
-          <span className="side-panel-mark" aria-hidden="true">
-            <span />
-          </span>
+          <span className="side-panel-mark" aria-hidden="true" />
           <span className="side-panel-name">Forbearance</span>
         </button>
 
-        <div className="side-panel-status">
-          <span className="side-panel-status-live">
-            <span className="side-panel-status-pip" aria-hidden="true" />
-            {status.isLive ? "LIVE" : "CACHED"}
-          </span>
-          <span>{status.networkName}</span>
-          <span>frontier {formatBlockHeight(status.attestedFrontier)}</span>
-          <span>{status.secondsSinceFrontier}s ago</span>
-        </div>
-
         <div className="side-panel-section">
-          <span className="side-panel-heading">Markets</span>
-          {markets.map((market) => (
-            <button
-              key={market.id}
-              type="button"
-              className={`side-panel-market ${market.id === selectedMarketId ? "is-current" : ""}`}
-              onClick={() => onSelectMarket(market.id)}
-            >
-              <span className="side-panel-market-glyph" aria-hidden="true">
-                {describeMarketGlyph(market.finding)}
-              </span>
-              <span className="side-panel-market-name">
-                {market.protocol} {market.asset}
-              </span>
-              <span className="side-panel-market-score">
-                {market.livenessScore}
-              </span>
-            </button>
-          ))}
+          <span className="side-panel-heading">Markets watched</span>
+
+          {markets.map((market) => {
+            const finding = describeFinding(market.finding);
+            const isCurrent = market.id === selectedMarketId;
+
+            return (
+              <button
+                key={market.id}
+                type="button"
+                className={`side-panel-market side-panel-market--${finding.tone} ${isCurrent ? "is-current" : ""}`}
+                onClick={() => onSelectMarket(market.id)}
+                aria-current={isCurrent}
+              >
+                <span className="side-panel-market-glyph" aria-hidden="true">
+                  {finding.glyph}
+                </span>
+                <span className="side-panel-market-name">
+                  {market.protocol} {market.asset}
+                </span>
+                <span className="side-panel-market-score">
+                  {market.livenessScore}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        <div className="side-panel-meters">
-          <span className="side-panel-meter-row">
-            <span>Case files</span>
-            <b>{formatCount(totals.caseFileCount)}</b>
+        <div className="side-panel-examiner">
+          <span className="side-panel-examiner-label">Examiner · GPT-4o</span>
+          <span className="side-panel-examiner-row">
+            <span>Treasury</span>
+            <b>{formatCtc(examiner.treasuryCtc, 0)}</b>
           </span>
-          <span className="side-panel-meter-row">
-            <span>Exhibits</span>
-            <b>{formatCount(totals.exhibitCount)}</b>
-          </span>
-          <span className="side-panel-meter-row">
-            <span>Gas spent</span>
-            <b>{formatCtc(totals.gasSpentCtc)}</b>
-          </span>
-          <span className="side-panel-meter-row">
-            <span>Attestation grade</span>
-            <b>{formatPercent(totals.attestationGradeShare)}</b>
+          <span className="side-panel-examiner-row">
+            <span>Ready to file</span>
+            <b>{filingCount}</b>
           </span>
         </div>
       </nav>
