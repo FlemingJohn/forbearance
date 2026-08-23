@@ -1,19 +1,22 @@
 import "./StatTile.css";
 
+type StatTone = "neutral" | "watch" | "alarm";
+
 interface StatTileProps {
   label: string;
   value: string;
   note: string;
-  isAlert?: boolean;
+  tone?: StatTone;
 }
 
-export function StatTile({ label, value, note, isAlert = false }: StatTileProps) {
-  const classNames = ["stat-tile", isAlert ? "stat-tile--alert" : ""]
-    .filter(Boolean)
-    .join(" ");
-
+export function StatTile({
+  label,
+  value,
+  note,
+  tone = "neutral",
+}: StatTileProps) {
   return (
-    <div className={classNames}>
+    <div className={`stat-tile stat-tile--${tone}`}>
       <span className="stat-tile-label">{label}</span>
       <span className="stat-tile-value">{value}</span>
       <span className="stat-tile-note">{note}</span>
