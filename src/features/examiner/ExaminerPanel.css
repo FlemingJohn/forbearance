@@ -1,0 +1,134 @@
+.examiner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-loose);
+}
+
+.examiner-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-base);
+  align-items: start;
+}
+
+.examiner-title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-hair);
+}
+
+.examiner-model {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+.examiner-purse {
+  display: flex;
+  gap: var(--space-loose);
+  padding: var(--space-snug) var(--space-base);
+  border: var(--border-frame);
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.examiner-purse-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.examiner-purse-label {
+  font-size: var(--font-size-caption);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-chrome);
+}
+
+.examiner-purse-value {
+  font-size: 1.15rem;
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.examiner-economics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: var(--border-frame);
+}
+
+.examiner-economic {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-hair);
+  padding: var(--space-base);
+  border-right: var(--border-frame);
+}
+
+.examiner-economic:last-child {
+  border-right: 0;
+}
+
+.examiner-economic-term {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.examiner-economic-detail {
+  font-size: var(--font-size-caption);
+  color: var(--color-muted);
+  max-width: none;
+}
+
+.examiner-decision {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+.examiner-learning {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-tight);
+  padding: var(--space-base);
+  border: var(--border-frame);
+  border-left-width: 8px;
+}
+
+.examiner-learning-label {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.examiner-shift {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 60rem) {
+  .examiner-head {
+    grid-template-columns: 1fr;
+  }
+
+  .examiner-economics {
+    grid-template-columns: 1fr;
+  }
+
+  .examiner-economic {
+    border-right: 0;
+    border-bottom: var(--border-frame);
+  }
+
+  .examiner-economic:last-child {
+    border-bottom: 0;
+  }
+}
