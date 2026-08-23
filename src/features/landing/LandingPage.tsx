@@ -1,11 +1,11 @@
 import { PressButton } from "@/components/PressButton/PressButton";
+import { ShaderBackground } from "@/components/ShaderBackground/ShaderBackground";
 import { SilenceTrack } from "@/components/SilenceTrack/SilenceTrack";
-import { Tag } from "@/components/Tag/Tag";
-import { Window } from "@/components/Window/Window";
+import { StepIcon } from "@/components/StepIcon/StepIcon";
+import { workSteps } from "@/data/howItWorks";
 import { formatDuration } from "@/lib/formatDuration";
-import { formatBlockHeight, formatCount, formatUsd } from "@/lib/formatNumber";
+import { formatBlockHeight, formatCount } from "@/lib/formatNumber";
 import type { CaseFile, ChainStatus, RegistryTotals } from "@/types";
-import { HowItWorks } from "./HowItWorks";
 import "./LandingPage.css";
 
 interface LandingPageProps {
@@ -31,69 +31,54 @@ export function LandingPage({
 }: LandingPageProps) {
   return (
     <div className="landing">
-      <div className="landing-inner">
-        <Window fileName="forbearance">
-          <div className="landing-hero">
-            <div className="landing-hero-copy">
-              <h1 className="landing-headline">
-                Nobody checks if the watchers are watching.
-              </h1>
+      <section className="landing-hero">
+        <ShaderBackground className="landing-hero-shader" />
+        <span className="landing-hero-veil" aria-hidden="true" />
 
-              <p className="text-lede">
-                Lending protocols assume a liquidator will show up when a loan
-                goes bad. Nobody verifies it. Forbearance proves whether they
-                actually do, using Ethereum transactions anyone can open and
-                check.
-              </p>
+        <div className="landing-hero-inner">
+          <span className="landing-eyebrow">
+            <span className="landing-eyebrow-pip" aria-hidden="true" />
+            Reading Ethereum mainnet · block{" "}
+            {formatBlockHeight(status.attestedFrontier)}
+          </span>
 
-              <div className="landing-actions">
-                <PressButton onClick={onOpenDashboard} variant="primary">
-                  Open the dashboard
-                </PressButton>
-                <span className="text-caption">
-                  No wallet. No login. Reads live Ethereum mainnet.
-                </span>
-              </div>
-            </div>
+          <h1 className="landing-headline">
+            Nobody checks if the watchers are watching.
+          </h1>
 
-            <figure className="landing-hero-figure">
-              <figcaption className="landing-hero-figure-label">
-                <span>Morpho rsETH</span>
-                <span>48m 12s unclaimed</span>
-              </figcaption>
-              <SilenceTrack
-                openedAtBlock={silenceCaseFile.openedAtBlock}
-                closedAtBlock={silenceCaseFile.closedAtBlock}
-                attemptBlocks={collectAttemptBlocks(silenceCaseFile)}
-              />
-              <p className="text-caption">
-                One real position. Two proven transactions at either end. Nothing
-                in between.
-              </p>
-            </figure>
-          </div>
-        </Window>
+          <p className="landing-subhead">
+            Lending protocols assume a liquidator will show up when a loan goes
+            bad. Nobody verifies it. Forbearance proves whether they actually do,
+            using Ethereum transactions anyone can open and check.
+          </p>
 
-        <Window fileName="how-it-works">
-          <div className="landing-section-head">
-            <h2>How it works</h2>
-            <span className="text-caption">
-              Ethereum mainnet · proven on Creditcoin
+          <div className="landing-actions">
+            <PressButton onClick={onOpenDashboard} variant="onDark">
+              Open the dashboard
+            </PressButton>
+            <span className="landing-hero-note">
+              No wallet, no login, nothing to install.
             </span>
           </div>
-          <HowItWorks />
-        </Window>
+        </div>
+      </section>
 
-        <Window fileName="the-evidence.file">
+      <div className="landing-body">
+        <section>
           <div className="landing-section-head">
             <h2>Two intervals. Same delay. Opposite disease.</h2>
+            <p>
+              Only one liquidator can close a position, so proving who finally
+              closed it proves everyone else declined until that moment. What
+              separates the two cases is whether anyone tried.
+            </p>
           </div>
 
-          <div className="landing-proof">
-            <div className="landing-proof-column">
-              <div className="landing-proof-heading">
-                <Tag isInverted>Incentive failure</Tag>
-                <span className="text-caption">
+          <div className="landing-compare">
+            <article className="landing-card">
+              <div className="landing-card-head">
+                <span className="landing-card-title">Incentive failure</span>
+                <span className="landing-card-market">
                   {silenceCaseFile.marketName}
                 </span>
               </div>
@@ -102,19 +87,19 @@ export function LandingPage({
                 closedAtBlock={silenceCaseFile.closedAtBlock}
                 attemptBlocks={collectAttemptBlocks(silenceCaseFile)}
               />
-              <p className="text-small">
+              <p>
                 Empty because nothing happened.{" "}
                 {formatDuration(silenceCaseFile.silenceSeconds)} in which{" "}
-                {formatCount(silenceCaseFile.respondentCount)} liquidators saw{" "}
-                {formatUsd(silenceCaseFile.rewardIgnoredUsd)} on the table and
-                walked past it. The reward was not worth claiming.
+                {formatCount(silenceCaseFile.respondentCount)} liquidators saw
+                the position and walked past it. The reward was not worth
+                claiming.
               </p>
-            </div>
+            </article>
 
-            <div className="landing-proof-column">
-              <div className="landing-proof-heading">
-                <Tag>Mechanism failure</Tag>
-                <span className="text-caption">
+            <article className="landing-card">
+              <div className="landing-card-head">
+                <span className="landing-card-title">Mechanism failure</span>
+                <span className="landing-card-market">
                   {attemptsCaseFile.marketName}
                 </span>
               </div>
@@ -123,28 +108,44 @@ export function LandingPage({
                 closedAtBlock={attemptsCaseFile.closedAtBlock}
                 attemptBlocks={collectAttemptBlocks(attemptsCaseFile)}
               />
-              <p className="text-small">
+              <p>
                 Every mark is a proven failed attempt. They tried{" "}
                 {formatCount(attemptsCaseFile.attemptCount)} times and the call
                 kept reverting. The reward was fine. The mechanism is broken.
               </p>
-            </div>
+            </article>
+          </div>
+        </section>
+
+        <section>
+          <div className="landing-section-head">
+            <h2>How it works</h2>
+            <p>
+              Checking a fact on Creditcoin is free. Putting it on the record
+              costs gas, and gas rises as evidence ages. That tension is what the
+              Examiner spends its budget solving.
+            </p>
           </div>
 
-          <p className="text-small">
-            Only one liquidator can close a position, so proving who finally
-            closed it proves everyone else declined until that moment. Proving
-            the failed attempts is what separates the two cases, and almost
-            nothing else can prove a transaction that failed.
-          </p>
+          <div className="landing-steps">
+            {workSteps.map((step) => (
+              <article key={step.ordinal} className="landing-step">
+                <StepIcon name={step.icon} />
+                <span className="landing-step-ordinal">{step.ordinal}</span>
+                <span className="landing-step-title">{step.title}</span>
+                <p className="landing-step-detail">{step.detail}</p>
+              </article>
+            ))}
+          </div>
+        </section>
 
-          <p className="landing-footnote">
+        <footer className="landing-foot">
+          <span>
             {formatCount(totals.caseFileCount)} case files ·{" "}
-            {formatCount(totals.exhibitCount)} exhibits sealed ·{" "}
-            {status.networkName} frontier{" "}
-            {formatBlockHeight(status.attestedFrontier)}
-          </p>
-        </Window>
+            {formatCount(totals.exhibitCount)} exhibits sealed
+          </span>
+          <span>BUIDL CTC 2026 Fall · AI track · CC3 Testnet 102031</span>
+        </footer>
       </div>
     </div>
   );
