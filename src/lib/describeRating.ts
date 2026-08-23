@@ -1,7 +1,7 @@
 import { formatWaitClock } from "./formatDuration";
 import { formatCount } from "./formatNumber";
 import type { CaseFile, Market } from "@/types";
-import type { Grade, Rating, RatingBand, RatingReason } from "@/types/rating";
+import type { Grade, Rating, RatingBand } from "@/types/rating";
 
 const gradeByScore: Grade[] = ["D", "D", "D", "C", "BB", "BBB", "A", "AA", "AAA"];
 
@@ -60,33 +60,20 @@ export function describeRating(market: Market): Rating {
   };
 }
 
-export function listRatingReasons(
+export function listRatingMetrics(
   market: Market,
   marketCaseFiles: CaseFile[],
-): RatingReason[] {
+): string[] {
   const exhibitCount = marketCaseFiles.reduce(
     (total, caseFile) => total + caseFile.exhibits.length,
     0,
   );
 
   return [
-    {
-      label: `${formatWaitClock(market.medianWaitSeconds)} median delay`,
-      detail: "time a bad position stayed open before anyone closed it",
-    },
-    {
-      label:
-        market.attemptRatio === 0
-          ? "No liquidator even tried"
-          : `${market.attemptRatio.toFixed(1)} attempts per opportunity`,
-      detail:
-        market.attemptRatio === 0
-          ? "the reward was not worth claiming"
-          : "how hard liquidators compete for this collateral",
-    },
-    {
-      label: `${formatCount(exhibitCount)} proven transactions`,
-      detail: "every number above comes from Ethereum mainnet, not a survey",
-    },
+    `${formatWaitClock(market.medianWaitSeconds)} median delay`,
+    market.attemptRatio === 0
+      ? "no liquidator even tried"
+      : `${market.attemptRatio.toFixed(1)} attempts per opportunity`,
+    `${formatCount(exhibitCount)} proven transactions`,
   ];
 }
