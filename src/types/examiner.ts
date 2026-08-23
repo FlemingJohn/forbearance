@@ -8,7 +8,8 @@ export interface IntervalCandidate {
   closedAtBlock: number;
   silenceSeconds: number;
   attemptCount: number;
-  rewardUsd: number;
+  seizedAmount: number;
+  seizedSymbol: string;
   respondentCount: number;
   evidenceGrade: EvidenceGrade;
   continuityHashCount: number;
