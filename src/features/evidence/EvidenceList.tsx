@@ -27,9 +27,9 @@ export function EvidenceList({ caseFiles }: EvidenceListProps) {
   ).length;
 
   return (
-    <div className="stack">
+    <div className="evidence">
       <div className="evidence-head">
-        <span className="dashboard-section-label">The evidence</span>
+        <span className="evidence-title">Evidence</span>
         <span className="evidence-count">
           {formatCount(caseFiles.length)} intervals
           {mechanismCount > 0 && ` · ${mechanismCount} with failed attempts`}
