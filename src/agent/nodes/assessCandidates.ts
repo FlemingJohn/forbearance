@@ -9,8 +9,8 @@ liquidators failed to act on Ethereum lending positions.
 An interval is worth filing when the record it produces will hold up. Judge each
 candidate on:
 
-- Length of silence relative to the reward left unclaimed. A long wait on a large
-  reward is strong evidence that liquidators are absent.
+- Length of silence relative to the collateral seized. A long wait on a large
+  seizure is strong evidence that liquidators were absent while value sat exposed.
 - Attempt count. Zero attempts points to a broken incentive. Several reverted
   attempts points to a broken mechanism. Both are fileable, mixed or ambiguous
   patterns are weaker.
@@ -27,7 +27,7 @@ function describeCandidate(candidate: IntervalCandidate): string {
     `market: ${candidate.marketName}`,
     `silence: ${candidate.silenceSeconds}s`,
     `attempts: ${candidate.attemptCount}`,
-    `reward: $${candidate.rewardUsd}`,
+    `seized: ${candidate.seizedAmount.toFixed(4)} ${candidate.seizedSymbol}`,
     `respondents: ${candidate.respondentCount}`,
     `evidence grade: ${candidate.evidenceGrade}`,
     `continuity hashes: ${candidate.continuityHashCount}`,
