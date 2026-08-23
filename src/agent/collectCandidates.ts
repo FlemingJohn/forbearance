@@ -1,9 +1,14 @@
 import type { ChainClients } from "@/chain/createProviders";
+import { findLiquidationsAcrossProtocols } from "@/chain/findLiquidations";
+import { lendingProtocols } from "@/chain/lendingProtocols";
 import { readAttestedFrontier } from "@/chain/readChainInfo";
 import type { IntervalCandidate } from "@/types/examiner";
 
-const BLOCKS_BEHIND_FRONTIER = 20;
+const SEARCH_WINDOW_BLOCKS = 900;
+const BLOCKS_BEHIND_FRONTIER = 5;
 const SECONDS_PER_BLOCK = 12;
+const ASSUMED_OPPORTUNITY_BLOCKS = 40;
+const BOUNTY_CTC = 50;
 
 export async function collectCandidates(
   clients: ChainClients,
@@ -14,29 +19,30 @@ export async function collectCandidates(
     clients.sourceChainKey,
   );
 
-  const targetHeight = frontier.height - BLOCKS_BEHIND_FRONTIER;
-  const block = await clients.ethereumProvider.getBlock(targetHeight, false);
+  const toBlock = frontier.height - BLOCKS_BEHIND_FRONTIER;
+  const fromBlock = toBlock - SEARCH_WINDOW_BLOCKS;
 
-  if (!block) {
-    return [];
-  }
+  const liquidations = await findLiquidationsAcrossProtocols(
+    clients.ethereumProvider,
+    lendingProtocols,
+    fromBlock,
+    toBlock,
+  );
 
-  const hashes = block.transactions.slice(0, wantedCount);
-
-  return hashes.map((transactionHash, index) => ({
-    id: `candidate-${targetHeight}-${index}`,
-    marketId: "sampled-mainnet",
-    marketName: `Ethereum block ${targetHeight}`,
-    openedAtBlock: targetHeight - 10,
-    closedAtBlock: targetHeight,
-    silenceSeconds: 10 * SECONDS_PER_BLOCK,
-    attemptCount: index % 3,
-    rewardUsd: 5000 + index * 2500,
-    respondentCount: 100 + index,
+  return liquidations.slice(0, wantedCount).map((liquidation, index) => ({
+    id: `interval-${liquidation.blockHeight}-${liquidation.transactionIndex}`,
+    marketId: liquidation.protocolId,
+    marketName: liquidation.protocolName,
+    openedAtBlock: liquidation.blockHeight - ASSUMED_OPPORTUNITY_BLOCKS,
+    closedAtBlock: liquidation.blockHeight,
+    silenceSeconds: ASSUMED_OPPORTUNITY_BLOCKS * SECONDS_PER_BLOCK,
+    attemptCount: 0,
+    rewardUsd: 0,
+    respondentCount: 0,
     evidenceGrade: "attestation",
     continuityHashCount: 0,
     filingCostCtc: 0,
-    bountyCtc: 50,
-    transactionHashes: [transactionHash],
+    bountyCtc: BOUNTY_CTC + index * 0,
+    transactionHashes: [liquidation.transactionHash],
   }));
 }
