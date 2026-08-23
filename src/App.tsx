@@ -1,14 +1,18 @@
 import { useMemo, useState } from "react";
-import { HonestyStrip } from "@/components/HonestyStrip/HonestyStrip";
 import { SidePanel } from "@/components/SidePanel/SidePanel";
 import { TopBar } from "@/components/TopBar/TopBar";
+import {
+  connectWallet,
+  readInitialWalletState,
+  switchToTestnet,
+} from "@/chain/connectWallet";
 import { caseFiles, findCaseFilesByMarket } from "@/data/caseFiles";
 import { chainStatus } from "@/data/chainStatus";
 import { examinerState } from "@/data/examiner";
 import { markets, registryTotals } from "@/data/markets";
-import { Dashboard } from "@/features/dashboard/Dashboard";
+import { Dashboard, type DashboardTab } from "@/features/dashboard/Dashboard";
 import { LandingPage } from "@/features/landing/LandingPage";
-import { formatBlockHeight } from "@/lib/formatNumber";
+import type { WalletState } from "@/types/wallet";
 import "./App.css";
 
 const DEFAULT_MARKET_ID = "morpho-rseth";
@@ -26,8 +30,10 @@ function requireCaseFile(caseFileId: string) {
 export function App() {
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const [isPanelVisible, setIsPanelVisible] = useState(true);
+  const [currentTab, setCurrentTab] = useState<DashboardTab>("evidence");
   const [selectedMarketId, setSelectedMarketId] =
     useState<string>(DEFAULT_MARKET_ID);
+  const [wallet, setWallet] = useState<WalletState>(readInitialWalletState);
 
   const silenceCaseFile = useMemo(() => requireCaseFile("case-8f2a"), []);
   const attemptsCaseFile = useMemo(() => requireCaseFile("case-71bd"), []);
@@ -42,6 +48,16 @@ export function App() {
     [selectedMarketId],
   );
 
+  async function requestWalletConnection() {
+    setWallet((current) => ({ ...current, status: "connecting" }));
+    setWallet(await connectWallet());
+  }
+
+  async function requestNetworkSwitch() {
+    await switchToTestnet();
+    setWallet(await connectWallet());
+  }
+
   if (!isDashboardOpen) {
     return (
       <LandingPage
@@ -53,10 +69,6 @@ export function App() {
       />
     );
   }
-
-  const selectedName = selectedMarket
-    ? `${selectedMarket.protocol} · ${selectedMarket.asset}`
-    : "All markets";
 
   return (
     <div className="app">
@@ -73,37 +85,25 @@ export function App() {
 
       <div className={`app-body ${isPanelVisible ? "has-panel" : ""}`}>
         <TopBar
-          title={selectedName}
-          meta={`${chainStatus.networkName} · frontier ${formatBlockHeight(chainStatus.attestedFrontier)}`}
+          status={chainStatus}
+          wallet={wallet}
           isPanelVisible={isPanelVisible}
           onTogglePanel={() => setIsPanelVisible((visible) => !visible)}
+          onConnectWallet={requestWalletConnection}
+          onSwitchNetwork={requestNetworkSwitch}
         />
 
         <main className="app-content">
-          <HonestyStrip status={chainStatus} />
-
           <Dashboard
-            markets={markets}
-            totals={registryTotals}
+            market={selectedMarket}
+            caseFiles={selectedCaseFiles}
             examiner={examinerState}
-            selectedMarket={selectedMarket}
-            selectedCaseFiles={selectedCaseFiles}
-            onSelectMarket={setSelectedMarketId}
+            wallet={wallet}
+            currentTab={currentTab}
+            onSelectTab={setCurrentTab}
+            onFileEvidence={() => setCurrentTab("examiner")}
           />
         </main>
-
-        <footer className="app-footer">
-          <div>
-            <h3>Forbearance</h3>
-            <p className="text-small">
-              A public registry of proven inaction, built on the Attestcoin
-              Protocol.
-            </p>
-          </div>
-          <p className="text-caption">
-            BUIDL CTC 2026 Fall · AI track · CC3 Testnet 102031
-          </p>
-        </footer>
       </div>
     </div>
   );
