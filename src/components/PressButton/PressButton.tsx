@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import "./PressButton.css";
 
-type PressButtonVariant = "default" | "primary" | "quiet";
+type PressButtonVariant = "primary" | "secondary" | "onDark" | "ghost";
 
 interface PressButtonProps {
   children: ReactNode;
@@ -12,23 +12,17 @@ interface PressButtonProps {
   label?: string;
 }
 
-const variantClassNames: Record<PressButtonVariant, string> = {
-  default: "",
-  primary: "press-button--primary",
-  quiet: "press-button--quiet",
-};
-
 export function PressButton({
   children,
   onClick,
-  variant = "default",
+  variant = "secondary",
   isFullWidth = false,
   isDisabled = false,
   label,
 }: PressButtonProps) {
   const classNames = [
     "press-button",
-    variantClassNames[variant],
+    `press-button--${variant}`,
     isFullWidth ? "press-button--block" : "",
   ]
     .filter(Boolean)
