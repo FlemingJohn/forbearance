@@ -1,10 +1,8 @@
 import { Panel } from "@/components/Panel/Panel";
-import { PressButton } from "@/components/PressButton/PressButton";
 import { Tag } from "@/components/Tag/Tag";
 import { formatEvidenceAge } from "@/lib/formatDuration";
 import { formatCtc, formatProbability } from "@/lib/formatNumber";
 import type { ExaminerState } from "@/types";
-import type { WalletState } from "@/types/wallet";
 import "./ExaminerPanel.css";
 
 const rules = [
@@ -15,19 +13,12 @@ const rules = [
 
 interface ExaminerPanelProps {
   examiner: ExaminerState;
-  wallet: WalletState;
-  onFileEvidence: () => void;
 }
 
-export function ExaminerPanel({
-  examiner,
-  wallet,
-  onFileEvidence,
-}: ExaminerPanelProps) {
+export function ExaminerPanel({ examiner }: ExaminerPanelProps) {
   const filings = examiner.candidates.filter(
     (candidate) => candidate.decision === "file",
   );
-  const canFile = wallet.status === "connected";
 
   return (
     <Panel
@@ -84,18 +75,12 @@ export function ExaminerPanel({
         </div>
 
         <div className="examiner-action">
-          <PressButton
-            onClick={onFileEvidence}
-            variant="primary"
-            isFullWidth
-            isDisabled={!canFile}
-          >
-            File {filings.length} case files
-          </PressButton>
+          <span className="examiner-action-count">
+            {filings.length} filed this round
+          </span>
           <span className="text-caption">
-            {canFile
-              ? "Signs one batched transaction on Creditcoin Testnet."
-              : "Connect a wallet to file. Reading needs none."}
+            The Examiner signs its own filings from its treasury. Nothing here
+            asks you for a wallet.
           </span>
         </div>
 
