@@ -60,6 +60,9 @@ export function App() {
         markets={markets}
         examiner={examinerState}
         selectedMarketId={selectedMarketId}
+        wallet={wallet}
+        exposure={exposure}
+        onConnectWallet={connect}
         isVisible={isPanelVisible}
         onSelectMarket={setSelectedMarketId}
         onOpenLanding={() => setIsDashboardOpen(false)}
@@ -78,9 +81,7 @@ export function App() {
             market={selectedMarket}
             caseFiles={selectedCaseFiles}
             examiner={examinerState}
-            wallet={wallet}
             exposure={exposure}
-            onConnectWallet={connect}
           />
         </main>
       </div>
