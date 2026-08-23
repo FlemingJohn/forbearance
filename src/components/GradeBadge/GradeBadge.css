@@ -1,0 +1,27 @@
+.grade-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-sharp);
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.04em;
+}
+
+.grade-badge--safe {
+  background: var(--signal-calm-wash);
+  color: var(--signal-calm);
+}
+
+.grade-badge--caution {
+  background: var(--signal-watch-wash);
+  color: var(--signal-watch);
+}
+
+.grade-badge--unsafe {
+  background: var(--signal-alarm-wash);
+  color: var(--signal-alarm);
+}
