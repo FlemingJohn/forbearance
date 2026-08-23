@@ -10,7 +10,7 @@ import { caseFiles, findCaseFilesByMarket } from "@/data/caseFiles";
 import { chainStatus } from "@/data/chainStatus";
 import { examinerState } from "@/data/examiner";
 import { markets, registryTotals } from "@/data/markets";
-import { Dashboard, type DashboardTab } from "@/features/dashboard/Dashboard";
+import { Dashboard } from "@/features/dashboard/Dashboard";
 import { LandingPage } from "@/features/landing/LandingPage";
 import type { WalletState } from "@/types/wallet";
 import "./App.css";
@@ -30,7 +30,6 @@ function requireCaseFile(caseFileId: string) {
 export function App() {
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const [isPanelVisible, setIsPanelVisible] = useState(true);
-  const [currentTab, setCurrentTab] = useState<DashboardTab>("evidence");
   const [selectedMarketId, setSelectedMarketId] =
     useState<string>(DEFAULT_MARKET_ID);
   const [wallet, setWallet] = useState<WalletState>(readInitialWalletState);
@@ -73,9 +72,8 @@ export function App() {
   return (
     <div className="app">
       <SidePanel
-        status={chainStatus}
         markets={markets}
-        totals={registryTotals}
+        examiner={examinerState}
         selectedMarketId={selectedMarketId}
         isVisible={isPanelVisible}
         onSelectMarket={setSelectedMarketId}
@@ -99,9 +97,7 @@ export function App() {
             caseFiles={selectedCaseFiles}
             examiner={examinerState}
             wallet={wallet}
-            currentTab={currentTab}
-            onSelectTab={setCurrentTab}
-            onFileEvidence={() => setCurrentTab("examiner")}
+            onFileEvidence={requestWalletConnection}
           />
         </main>
       </div>
