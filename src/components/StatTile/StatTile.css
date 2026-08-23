@@ -1,39 +1,51 @@
 .stat-tile {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: var(--space-snug) var(--space-base);
-  background: var(--color-paper);
-  border: var(--border-frame);
+  gap: var(--gap-hair);
+  padding: var(--gap-base);
+  background: var(--surface-raised);
+  border: 1px solid var(--line-hair);
+  border-radius: var(--radius-soft);
 }
 
 .stat-tile-label {
-  font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.1em;
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-faint);
+  color: var(--text-muted);
 }
 
 .stat-tile-value {
-  font-size: 1.45rem;
-  font-weight: var(--font-weight-heavy);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: var(--weight-bold);
   letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--text-strong);
   font-variant-numeric: tabular-nums;
-  line-height: 1.15;
 }
 
 .stat-tile-note {
-  font-size: var(--font-size-caption);
-  color: var(--color-muted);
+  font-size: var(--type-caption);
+  color: var(--text-muted);
 }
 
-.stat-tile--alert {
-  background: var(--color-ink);
-  color: var(--color-paper);
+.stat-tile--watch {
+  border-color: color-mix(in srgb, var(--signal-watch) 34%, transparent);
+  background: var(--signal-watch-wash);
 }
 
-.stat-tile--alert .stat-tile-label,
-.stat-tile--alert .stat-tile-note {
-  color: var(--color-chrome);
+.stat-tile--watch .stat-tile-value {
+  color: var(--signal-watch);
+}
+
+.stat-tile--alarm {
+  border-color: color-mix(in srgb, var(--signal-alarm) 34%, transparent);
+  background: var(--signal-alarm-wash);
+}
+
+.stat-tile--alarm .stat-tile-value {
+  color: var(--signal-alarm);
 }
