@@ -1,25 +1,25 @@
 .check-row {
   display: flex;
   align-items: baseline;
-  gap: var(--space-tight);
-  font-size: var(--font-size-small);
+  gap: var(--gap-tight);
+  font-size: var(--type-caption);
 }
 
 .check-row-label {
   flex: 0 0 auto;
-  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
 }
 
 .check-row-leader {
   flex: 1;
   height: 0;
-  border-bottom: 1px dotted var(--color-faint);
+  border-bottom: 1px dotted var(--line-firm);
   transform: translateY(-3px);
 }
 
 .check-row-value {
   flex: 0 0 auto;
-  font-weight: var(--font-weight-semibold);
-  font-variant-numeric: tabular-nums;
-  text-transform: uppercase;
+  font-family: var(--font-mono);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
 }
