@@ -1,10 +1,23 @@
-.evidence-list {
+.evidence {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--line-hair);
   border-radius: var(--radius-soft);
   background: var(--surface-raised);
   overflow: hidden;
+}
+
+.evidence-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.evidence-title {
+  font-family: var(--font-display);
+  font-size: var(--type-heading);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+  letter-spacing: -0.02em;
 }
 
 .evidence-row {
@@ -59,7 +72,7 @@
 }
 
 .evidence-body {
-  padding: var(--gap-base);
+  padding: var(--gap-base) var(--gap-base) var(--gap-loose);
   border-bottom: 1px solid var(--line-hair);
   background: var(--surface-page);
 }
@@ -80,6 +93,8 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--gap-tight);
+  padding: var(--gap-base) var(--gap-base) var(--gap-snug);
+  border-bottom: 1px solid var(--line-hair);
 }
 
 .evidence-count {
