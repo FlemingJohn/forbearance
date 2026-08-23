@@ -149,3 +149,10 @@
   font-size: var(--type-micro);
   color: var(--accent-strong);
 }
+
+.examiner-action-count {
+  font-family: var(--font-display);
+  font-size: var(--type-body);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+}
