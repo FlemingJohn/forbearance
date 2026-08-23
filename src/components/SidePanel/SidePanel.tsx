@@ -1,4 +1,6 @@
-import { describeFinding } from "@/lib/describeFinding";
+import { BrandMark } from "@/components/BrandMark/BrandMark";
+import { GradeBadge } from "@/components/GradeBadge/GradeBadge";
+import { describeRating } from "@/lib/describeRating";
 import { formatCtc } from "@/lib/formatNumber";
 import type { ExaminerState, Market } from "@/types";
 import "./SidePanel.css";
@@ -46,33 +48,28 @@ export function SidePanel({
           className="side-panel-brand"
           onClick={onOpenLanding}
         >
-          <span className="side-panel-mark" aria-hidden="true" />
+          <BrandMark size={26} />
           <span className="side-panel-name">Forbearance</span>
         </button>
 
         <div className="side-panel-section">
-          <span className="side-panel-heading">Markets watched</span>
+          <span className="side-panel-heading">Rated markets</span>
 
           {markets.map((market) => {
-            const finding = describeFinding(market.finding);
+            const rating = describeRating(market);
             const isCurrent = market.id === selectedMarketId;
 
             return (
               <button
                 key={market.id}
                 type="button"
-                className={`side-panel-market side-panel-market--${finding.tone} ${isCurrent ? "is-current" : ""}`}
+                className={`side-panel-market ${isCurrent ? "is-current" : ""}`}
                 onClick={() => onSelectMarket(market.id)}
                 aria-current={isCurrent}
               >
-                <span className="side-panel-market-glyph" aria-hidden="true">
-                  {finding.glyph}
-                </span>
+                <GradeBadge rating={rating} />
                 <span className="side-panel-market-name">
                   {market.protocol} {market.asset}
-                </span>
-                <span className="side-panel-market-score">
-                  {market.livenessScore}
                 </span>
               </button>
             );
@@ -80,13 +77,13 @@ export function SidePanel({
         </div>
 
         <div className="side-panel-examiner">
-          <span className="side-panel-examiner-label">Examiner · GPT-4o</span>
+          <span className="side-panel-examiner-label">Ratings analyst</span>
           <span className="side-panel-examiner-row">
             <span>Treasury</span>
             <b>{formatCtc(examiner.treasuryCtc, 0)}</b>
           </span>
           <span className="side-panel-examiner-row">
-            <span>Ready to file</span>
+            <span>Ratings issued</span>
             <b>{filingCount}</b>
           </span>
         </div>
