@@ -30,6 +30,8 @@ export interface CaseFile {
   respondentCount: number;
   evidenceGrade: EvidenceGrade;
   continuityHashCount: number;
+  openingFeedLabel: string;
+  wasOpeningMeasured: boolean;
   filedBy: string;
   exhibits: Exhibit[];
 }
