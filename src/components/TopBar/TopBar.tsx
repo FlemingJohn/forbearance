@@ -1,27 +1,21 @@
 import { ShaderBackground } from "@/components/ShaderBackground/ShaderBackground";
-import { WalletButton } from "@/components/WalletButton/WalletButton";
 import { formatBlockHeight } from "@/lib/formatNumber";
 import type { ChainStatus } from "@/types";
-import type { WalletState } from "@/types/wallet";
 import "./TopBar.css";
 
 interface TopBarProps {
   status: ChainStatus;
-  wallet: WalletState;
   isPanelVisible: boolean;
   onTogglePanel: () => void;
-  onConnectWallet: () => void;
-  onSwitchNetwork: () => void;
 }
 
 export function TopBar({
   status,
-  wallet,
   isPanelVisible,
   onTogglePanel,
-  onConnectWallet,
-  onSwitchNetwork,
 }: TopBarProps) {
+  const hasFrontier = status.attestedFrontier > 0;
+
   return (
     <header className="top-bar">
       <ShaderBackground className="top-bar-shader" />
@@ -42,21 +36,17 @@ export function TopBar({
 
         <span className="top-bar-status">
           <span className="top-bar-pip" aria-hidden="true" />
-          {status.isLive ? "LIVE" : "CACHED"}
+          {status.isLive ? "LIVE" : "CONNECTING"}
         </span>
 
         <span className="top-bar-meta">
-          {status.networkName} · block{" "}
-          {formatBlockHeight(status.attestedFrontier)} · verified on CC3 Testnet
+          {status.networkName}
+          {hasFrontier &&
+            ` · attested block ${formatBlockHeight(status.attestedFrontier)}`}
+          {hasFrontier && ` · ${status.secondsSinceFrontier}s ago`}
         </span>
 
-        <div className="top-bar-actions">
-          <WalletButton
-            wallet={wallet}
-            onConnect={onConnectWallet}
-            onSwitchNetwork={onSwitchNetwork}
-          />
-        </div>
+        <span className="top-bar-note">Read only · no wallet needed</span>
       </div>
     </header>
   );
