@@ -67,12 +67,6 @@ export function CaseFileWindow({ caseFile }: CaseFileWindowProps) {
           blockHeight={closingExhibit.blockHeight}
         />
 
-        <p className="case-file-note">
-          Only one liquidator can close this position, so proving who closed it
-          at {caseFile.closedAtClock} proves the other{" "}
-          {formatCount(caseFile.respondentCount - 1)} declined for the whole
-          interval.
-        </p>
       </div>
     </Panel>
   );
