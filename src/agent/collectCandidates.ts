@@ -6,7 +6,6 @@ import type { IntervalCandidate } from "@/types/examiner";
 
 const SEARCH_WINDOW_BLOCKS = 900;
 const BLOCKS_BEHIND_FRONTIER = 5;
-const OPPORTUNITY_WINDOW_BLOCKS = 40;
 const BOUNTY_CTC = 50;
 
 export async function collectCandidates(
@@ -45,7 +44,6 @@ export async function collectCandidates(
         clients.ethereumProvider,
         protocol,
         log,
-        log.blockNumber - OPPORTUNITY_WINDOW_BLOCKS,
       );
 
       candidates.push({
