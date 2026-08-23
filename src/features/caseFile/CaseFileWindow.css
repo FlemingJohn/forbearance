@@ -75,3 +75,16 @@
     gap: var(--gap-tight);
   }
 }
+
+.case-file-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-tight);
+}
+
+.case-file-opening {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--text-muted);
+}
