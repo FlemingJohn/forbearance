@@ -5,12 +5,6 @@ import { formatCtc, formatProbability } from "@/lib/formatNumber";
 import type { ExaminerState } from "@/types";
 import "./ExaminerPanel.css";
 
-const rules = [
-  { term: "Knowing is free", detail: "verifying a proof is a view call" },
-  { term: "Evidence ages", detail: "gas rises tenfold once pruned" },
-  { term: "All or none", detail: "one bad exhibit voids the batch" },
-];
-
 interface ExaminerPanelProps {
   examiner: ExaminerState;
 }
@@ -22,7 +16,7 @@ export function ExaminerPanel({ examiner }: ExaminerPanelProps) {
 
   return (
     <Panel
-      title="Examiner"
+      title="Ratings analyst"
       action={<span className="examiner-model">LangGraph · GPT-4o</span>}
     >
       <div className="examiner">
@@ -41,14 +35,11 @@ export function ExaminerPanel({ examiner }: ExaminerPanelProps) {
           </span>
         </div>
 
-        <div className="examiner-rules">
-          {rules.map((rule) => (
-            <span key={rule.term} className="examiner-rule">
-              <b>{rule.term}</b>
-              <span>{rule.detail}</span>
-            </span>
-          ))}
-        </div>
+        <p className="text-small">
+          Reads Ethereum, decides which events are worth paying to prove, and
+          issues the rating. It spends its own CTC and loses money when it is
+          wrong.
+        </p>
 
         <div className="examiner-candidates">
           {examiner.candidates.map((candidate) => (
@@ -76,11 +67,7 @@ export function ExaminerPanel({ examiner }: ExaminerPanelProps) {
 
         <div className="examiner-action">
           <span className="examiner-action-count">
-            {filings.length} filed this round
-          </span>
-          <span className="text-caption">
-            The Examiner signs its own filings from its treasury. Nothing here
-            asks you for a wallet.
+            {filings.length} ratings issued this round
           </span>
         </div>
 
