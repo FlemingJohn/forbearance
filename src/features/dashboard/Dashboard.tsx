@@ -1,108 +1,126 @@
 import { StatTile } from "@/components/StatTile/StatTile";
-import { Window } from "@/components/Window/Window";
+import { TabBar } from "@/components/TabBar/TabBar";
+import { Tag } from "@/components/Tag/Tag";
 import { CaseFileWindow } from "@/features/caseFile/CaseFileWindow";
-import { DocketWindow } from "@/features/docket/DocketWindow";
-import { RegistryWindow } from "@/features/registry/RegistryWindow";
+import { ExaminerPanel } from "@/features/examiner/ExaminerPanel";
 import { describeFinding } from "@/lib/describeFinding";
 import { formatWaitClock } from "@/lib/formatDuration";
-import { formatCount, formatPercent } from "@/lib/formatNumber";
-import { summariseRegistry } from "@/lib/summariseRegistry";
-import type {
-  CaseFile,
-  ExaminerState,
-  Market,
-  RegistryTotals,
-} from "@/types";
+import { formatCount, formatRatio } from "@/lib/formatNumber";
+import type { CaseFile, ExaminerState, Market } from "@/types";
+import type { WalletState } from "@/types/wallet";
 import "./Dashboard.css";
 
+export type DashboardTab = "evidence" | "examiner";
+
 interface DashboardProps {
-  markets: Market[];
-  totals: RegistryTotals;
+  market: Market | undefined;
+  caseFiles: CaseFile[];
   examiner: ExaminerState;
-  selectedMarket: Market | undefined;
-  selectedCaseFiles: CaseFile[];
-  onSelectMarket: (marketId: string) => void;
+  wallet: WalletState;
+  currentTab: DashboardTab;
+  onSelectTab: (tab: DashboardTab) => void;
+  onFileEvidence: () => void;
 }
 
 export function Dashboard({
-  markets,
-  totals,
+  market,
+  caseFiles,
   examiner,
-  selectedMarket,
-  selectedCaseFiles,
-  onSelectMarket,
+  wallet,
+  currentTab,
+  onSelectTab,
+  onFileEvidence,
 }: DashboardProps) {
-  const summary = summariseRegistry(markets);
-  const hasCaseFiles = selectedCaseFiles.length > 0;
+  if (!market) {
+    return null;
+  }
+
+  const finding = describeFinding(market.finding);
+  const filingCount = examiner.candidates.filter(
+    (candidate) => candidate.decision === "file",
+  ).length;
 
   return (
     <div className="dashboard">
+      <div className="dashboard-header">
+        <span className="dashboard-market">
+          {market.protocol} · {market.asset}
+        </span>
+        <Tag isInverted={finding.isFailure}>{finding.label}</Tag>
+      </div>
+
+      <p className="text-small">{finding.plainLanguage}</p>
+
       <div className="dashboard-stats">
         <StatTile
-          label="Markets watched"
-          value={formatCount(summary.marketCount)}
-          note="on Ethereum mainnet"
+          label="Liveness"
+          value={`${market.livenessScore}/10`}
+          note="how reliably liquidators arrive"
         />
         <StatTile
-          label="Failing now"
-          value={formatCount(summary.failingMarketCount)}
-          note="liquidators are not arriving"
-          isAlert={summary.failingMarketCount > 0}
+          label="Median wait"
+          value={formatWaitClock(market.medianWaitSeconds)}
+          note="typical time to close a bad position"
         />
         <StatTile
-          label="Longest silence"
-          value={formatWaitClock(summary.slowestWaitSeconds)}
-          note={summary.slowestMarketName}
+          label="Worst wait"
+          value={formatWaitClock(market.worstCaseWaitSeconds)}
+          note="longest proven silence"
+          isAlert={finding.isFailure}
         />
         <StatTile
-          label="Evidence grade"
-          value={formatPercent(totals.attestationGradeShare)}
-          note="proven at attestation resolution"
+          label="Attempt ratio"
+          value={formatRatio(market.attemptRatio)}
+          note={
+            market.attemptRatio === 0
+              ? "nobody tried at all"
+              : "tries per opportunity"
+          }
         />
       </div>
 
-      <RegistryWindow
-        markets={markets}
-        totals={totals}
-        selectedMarketId={selectedMarket?.id ?? null}
-        onSelectMarket={onSelectMarket}
+      <TabBar
+        tabs={[
+          {
+            id: "evidence",
+            label: "Evidence",
+            count: formatCount(caseFiles.length),
+          },
+          {
+            id: "examiner",
+            label: "Examiner",
+            count: `${filingCount} to file`,
+          },
+        ]}
+        currentTabId={currentTab}
+        onSelectTab={(tabId) => onSelectTab(tabId as DashboardTab)}
       />
 
-      {selectedMarket && (
-        <Window fileName={`${selectedMarket.id}.evidence`}>
-          <div className="dashboard-selection">
-            <span className="dashboard-selection-name">
-              {selectedMarket.protocol} · {selectedMarket.asset}
-            </span>
-            <span className="text-caption">
-              {describeFinding(selectedMarket.finding).plainLanguage}
-            </span>
-          </div>
-
-          {hasCaseFiles ? (
-            <p className="text-small">
-              {formatCount(selectedCaseFiles.length)} case file
-              {selectedCaseFiles.length === 1 ? "" : "s"} filed against this
-              market. Each one names the transactions that prove it.
-            </p>
+      <div className="dashboard-panel">
+        {currentTab === "evidence" &&
+          (caseFiles.length > 0 ? (
+            caseFiles.map((caseFile) => (
+              <CaseFileWindow key={caseFile.id} caseFile={caseFile} />
+            ))
           ) : (
             <div className="dashboard-empty">
               <h3>No case files filed</h3>
               <p className="text-small">
-                Liquidators arrived fast enough here that no interval crossed the
-                filing threshold. Choose Morpho rsETH or Morpho weETH in the side
-                panel to read a filed case.
+                Liquidators arrive fast enough here that no interval crossed the
+                filing threshold. Pick Morpho rsETH or Morpho weETH to read a
+                filed case.
               </p>
             </div>
-          )}
-        </Window>
-      )}
+          ))}
 
-      {selectedCaseFiles.map((caseFile) => (
-        <CaseFileWindow key={caseFile.id} caseFile={caseFile} />
-      ))}
-
-      <DocketWindow examiner={examiner} />
+        {currentTab === "examiner" && (
+          <ExaminerPanel
+            examiner={examiner}
+            wallet={wallet}
+            onFileEvidence={onFileEvidence}
+          />
+        )}
+      </div>
     </div>
   );
 }
