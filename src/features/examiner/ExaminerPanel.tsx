@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/DataTable/DataTable";
+import { Panel } from "@/components/Panel/Panel";
 import { PressButton } from "@/components/PressButton/PressButton";
 import { Tag } from "@/components/Tag/Tag";
 import { formatEvidenceAge } from "@/lib/formatDuration";
@@ -7,13 +7,10 @@ import type { ExaminerState } from "@/types";
 import type { WalletState } from "@/types/wallet";
 import "./ExaminerPanel.css";
 
-const headings = [
-  "Candidate",
-  "Holds",
-  "Evidence age",
-  "Filing cost",
-  "Bounty",
-  "Decision",
+const rules = [
+  { term: "Knowing is free", detail: "verifying a proof is a view call" },
+  { term: "Evidence ages", detail: "gas rises tenfold once pruned" },
+  { term: "All or none", detail: "one bad exhibit voids the batch" },
 ];
 
 interface ExaminerPanelProps {
@@ -30,24 +27,14 @@ export function ExaminerPanel({
   const filings = examiner.candidates.filter(
     (candidate) => candidate.decision === "file",
   );
-
   const canFile = wallet.status === "connected";
 
   return (
-    <div className="examiner">
-      <div className="examiner-head">
-        <div className="examiner-title">
-          <span className="examiner-model">
-            LangGraph · Azure OpenAI GPT-4o
-          </span>
-          <h2>The Examiner decides what is worth proving.</h2>
-          <p className="text-small">
-            Reading the chain is free, so it surveys every candidate at zero
-            cost. Filing evidence costs gas, so it files only what pays for
-            itself.
-          </p>
-        </div>
-
+    <Panel
+      title="Examiner"
+      action={<span className="examiner-model">LangGraph · GPT-4o</span>}
+    >
+      <div className="examiner">
         <div className="examiner-purse">
           <span className="examiner-purse-item">
             <span className="examiner-purse-label">Treasury</span>
@@ -62,82 +49,66 @@ export function ExaminerPanel({
             </span>
           </span>
         </div>
-      </div>
 
-      <div className="examiner-economics">
-        <div className="examiner-economic">
-          <span className="examiner-economic-term">Knowing is free</span>
-          <span className="examiner-economic-detail">
-            Both verify overloads are view calls, so checking a proof costs
-            nothing.
-          </span>
+        <div className="examiner-rules">
+          {rules.map((rule) => (
+            <span key={rule.term} className="examiner-rule">
+              <b>{rule.term}</b>
+              <span>{rule.detail}</span>
+            </span>
+          ))}
         </div>
-        <div className="examiner-economic">
-          <span className="examiner-economic-term">Evidence ages badly</span>
-          <span className="examiner-economic-detail">
-            Filing gas rises around tenfold once attestations are replaced by
-            checkpoints.
-          </span>
-        </div>
-        <div className="examiner-economic">
-          <span className="examiner-economic-term">Batches are all or none</span>
-          <span className="examiner-economic-detail">
-            One bad exhibit reverts the whole bundle and forfeits the gas.
-          </span>
-        </div>
-      </div>
 
-      <DataTable headings={headings} caption="Examiner filing decisions">
-        {examiner.candidates.map((candidate) => (
-          <tr key={candidate.id}>
-            <td>
-              {candidate.marketName} {candidate.reference}
-            </td>
-            <td className="is-numeric">
-              {formatProbability(candidate.probabilityHolds)}
-            </td>
-            <td className="is-numeric">
-              {formatEvidenceAge(candidate.evidenceAgeSeconds)}
-            </td>
-            <td className="is-numeric">
-              {formatCtc(candidate.filingCostCtc, 3)}
-            </td>
-            <td className="is-numeric">{formatCtc(candidate.bountyCtc, 0)}</td>
-            <td>
+        <div className="examiner-candidates">
+          {examiner.candidates.map((candidate) => (
+            <div key={candidate.id} className="examiner-candidate">
+              <span className="examiner-candidate-name">
+                <span className="examiner-candidate-market">
+                  {candidate.marketName}
+                </span>
+                <span className="examiner-candidate-meta">
+                  {formatEvidenceAge(candidate.evidenceAgeSeconds)} old ·{" "}
+                  {formatCtc(candidate.filingCostCtc, 3)}
+                </span>
+              </span>
+              <span className="examiner-candidate-score">
+                {formatProbability(candidate.probabilityHolds)}
+              </span>
               {candidate.decision === "file" ? (
-                <Tag isInverted>file</Tag>
+                <Tag tone="accent">file</Tag>
               ) : (
-                <span className="examiner-decision">{candidate.decision}</span>
+                <Tag tone="neutral">{candidate.decision}</Tag>
               )}
-            </td>
-          </tr>
-        ))}
-      </DataTable>
+            </div>
+          ))}
+        </div>
 
-      <div className="row">
-        <PressButton
-          onClick={onFileEvidence}
-          variant="primary"
-          isDisabled={!canFile}
-        >
-          File {filings.length} case files
-        </PressButton>
-        <span className="text-caption">
-          {canFile
-            ? "Signs one batched transaction on Creditcoin Testnet."
-            : "Connect a wallet to file. Reading needs none."}
-        </span>
-      </div>
+        <div className="examiner-action">
+          <PressButton
+            onClick={onFileEvidence}
+            variant="primary"
+            isFullWidth
+            isDisabled={!canFile}
+          >
+            File {filings.length} case files
+          </PressButton>
+          <span className="text-caption">
+            {canFile
+              ? "Signs one batched transaction on Creditcoin Testnet."
+              : "Connect a wallet to file. Reading needs none."}
+          </span>
+        </div>
 
-      <div className="examiner-learning">
-        <span className="examiner-learning-label">Last round</span>
-        <p className="text-small">{examiner.lastRoundNote}</p>
-        <p className="examiner-shift">
-          Reallocating attention · {examiner.attentionShift.marketName} ·{" "}
-          {formatCtc(examiner.attentionShift.fromCtcPerHour)} →{" "}
-          {formatCtc(examiner.attentionShift.toCtcPerHour)} per hour
-        </p>
+        <div className="examiner-learning">
+          <span className="examiner-learning-label">Last round</span>
+          <p>{examiner.lastRoundNote}</p>
+          <span className="examiner-shift">
+            {examiner.attentionShift.marketName} ·{" "}
+            {formatCtc(examiner.attentionShift.fromCtcPerHour)} →{" "}
+            {formatCtc(examiner.attentionShift.toCtcPerHour)} per hour
+          </span>
+        </div>
       </div>
-    </div>
+    </Panel>
   );
 }
