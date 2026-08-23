@@ -7,6 +7,7 @@ import { describeFinding } from "@/lib/describeFinding";
 import { formatDuration } from "@/lib/formatDuration";
 import { formatBlockHeight, formatCount } from "@/lib/formatNumber";
 import type { CaseFile } from "@/types";
+import { VerifyPanel } from "./VerifyPanel";
 import "./CaseFileWindow.css";
 
 interface CaseFileWindowProps {
@@ -18,6 +19,10 @@ export function CaseFileWindow({ caseFile }: CaseFileWindowProps) {
   const attemptBlocks = caseFile.exhibits
     .filter((exhibit) => exhibit.role === "attempt")
     .map((exhibit) => exhibit.blockHeight);
+
+  const closingExhibit =
+    caseFile.exhibits.find((exhibit) => exhibit.role === "close") ??
+    caseFile.exhibits[0]!;
 
   const caption = `${formatDuration(caseFile.silenceSeconds)} · ${formatCount(caseFile.attemptCount)} attempts proven · ${formatCount(caseFile.respondentCount)} eligible respondents`;
 
@@ -56,6 +61,11 @@ export function CaseFileWindow({ caseFile }: CaseFileWindowProps) {
           <CheckRow label="Evidence grade" value={caseFile.evidenceGrade} />
           <CheckRow label="Filed by" value={caseFile.filedBy} />
         </div>
+
+        <VerifyPanel
+          transactionHash={closingExhibit.transactionHash}
+          blockHeight={closingExhibit.blockHeight}
+        />
 
         <p className="case-file-note">
           Only one liquidator can close this position, so proving who closed it
