@@ -7,23 +7,18 @@ import { describeFinding } from "@/lib/describeFinding";
 import { formatWaitClock } from "@/lib/formatDuration";
 import { formatRatio } from "@/lib/formatNumber";
 import type { CaseFile, ExaminerState, Market } from "@/types";
-import type { WalletState } from "@/types/wallet";
 import "./Dashboard.css";
 
 interface DashboardProps {
   market: Market | undefined;
   caseFiles: CaseFile[];
   examiner: ExaminerState;
-  wallet: WalletState;
-  onFileEvidence: () => void;
 }
 
 export function Dashboard({
   market,
   caseFiles,
   examiner,
-  wallet,
-  onFileEvidence,
 }: DashboardProps) {
   if (!market) {
     return null;
@@ -91,11 +86,7 @@ export function Dashboard({
         </div>
 
         <div className="dashboard-column">
-          <ExaminerPanel
-            examiner={examiner}
-            wallet={wallet}
-            onFileEvidence={onFileEvidence}
-          />
+          <ExaminerPanel examiner={examiner} />
         </div>
       </div>
     </div>
