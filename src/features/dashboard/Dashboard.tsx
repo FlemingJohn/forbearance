@@ -1,11 +1,8 @@
+import { GradeCard } from "@/components/GradeCard/GradeCard";
 import { Panel } from "@/components/Panel/Panel";
-import { StatTile } from "@/components/StatTile/StatTile";
-import { Tag } from "@/components/Tag/Tag";
 import { CaseFileWindow } from "@/features/caseFile/CaseFileWindow";
 import { ExaminerPanel } from "@/features/examiner/ExaminerPanel";
-import { describeFinding } from "@/lib/describeFinding";
-import { formatWaitClock } from "@/lib/formatDuration";
-import { formatRatio } from "@/lib/formatNumber";
+import { describeRating, listRatingReasons } from "@/lib/describeRating";
 import type { CaseFile, ExaminerState, Market } from "@/types";
 import "./Dashboard.css";
 
@@ -15,77 +12,48 @@ interface DashboardProps {
   examiner: ExaminerState;
 }
 
-export function Dashboard({
-  market,
-  caseFiles,
-  examiner,
-}: DashboardProps) {
+export function Dashboard({ market, caseFiles, examiner }: DashboardProps) {
   if (!market) {
     return null;
   }
 
-  const finding = describeFinding(market.finding);
-  const hasCaseFiles = caseFiles.length > 0;
+  const rating = describeRating(market);
+  const reasons = listRatingReasons(market, caseFiles);
+  const marketName = `${market.protocol} · ${market.asset}`;
 
   return (
     <div className="dashboard" key={market.id}>
-      <div className="dashboard-header">
-        <span className="dashboard-market">
-          {market.protocol} · {market.asset}
-        </span>
-        <Tag tone={finding.tone}>{finding.label}</Tag>
-        <p className="dashboard-plain">{finding.plainLanguage}</p>
-      </div>
+      <GradeCard rating={rating} marketName={marketName} />
 
-      <div className="dashboard-stats">
-        <StatTile
-          label="Liveness"
-          value={`${market.livenessScore}/10`}
-          note="how reliably liquidators arrive"
-        />
-        <StatTile
-          label="Median wait"
-          value={formatWaitClock(market.medianWaitSeconds)}
-          note="typical time to close a bad position"
-        />
-        <StatTile
-          label="Worst wait"
-          value={formatWaitClock(market.worstCaseWaitSeconds)}
-          note="longest proven silence"
-          tone={finding.isFailure ? "watch" : "neutral"}
-        />
-        <StatTile
-          label="Attempt ratio"
-          value={formatRatio(market.attemptRatio)}
-          note={
-            market.attemptRatio === 0
-              ? "nobody tried at all"
-              : "tries per opportunity"
-          }
-          tone={market.finding === "mechanism" ? "alarm" : "neutral"}
-        />
+      <div className="dashboard-reasons">
+        {reasons.map((reason) => (
+          <div key={reason.label} className="dashboard-reason">
+            <span className="dashboard-reason-label">{reason.label}</span>
+            <span className="dashboard-reason-detail">{reason.detail}</span>
+          </div>
+        ))}
       </div>
 
       <div className="dashboard-split">
         <div className="dashboard-column">
-          {hasCaseFiles ? (
+          <span className="dashboard-section-label">The evidence</span>
+
+          {caseFiles.length > 0 ? (
             caseFiles.map((caseFile) => (
               <CaseFileWindow key={caseFile.id} caseFile={caseFile} />
             ))
           ) : (
-            <Panel title="No case files filed">
-              <div className="dashboard-empty">
-                <p className="text-small">
-                  Liquidators arrive fast enough here that no interval crossed
-                  the filing threshold. Pick Morpho rsETH or Morpho weETH in the
-                  side panel to read a filed case.
-                </p>
-              </div>
+            <Panel title="Nothing filed against this market">
+              <p className="text-small">
+                No position stayed open long enough to be worth recording.
+                Markets rated C or D have filed evidence to read.
+              </p>
             </Panel>
           )}
         </div>
 
         <div className="dashboard-column">
+          <span className="dashboard-section-label">Who rated it</span>
           <ExaminerPanel examiner={examiner} />
         </div>
       </div>
