@@ -7,9 +7,10 @@ const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 interface GradeCardProps {
   rating: Rating;
   marketName: string;
+  metrics: string[];
 }
 
-export function GradeCard({ rating, marketName }: GradeCardProps) {
+export function GradeCard({ rating, marketName, metrics }: GradeCardProps) {
   const dashOffset =
     RING_CIRCUMFERENCE - (RING_CIRCUMFERENCE * rating.ringPercent) / 100;
 
@@ -51,6 +52,14 @@ export function GradeCard({ rating, marketName }: GradeCardProps) {
         <span className="grade-card-market">{marketName}</span>
         <span className="grade-card-verdict">{rating.verdict}</span>
         <p className="grade-card-summary">{rating.summary}</p>
+
+        <div className="grade-card-metrics">
+          {metrics.map((metric) => (
+            <span key={metric} className="grade-card-metric">
+              {metric}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );
