@@ -39,20 +39,40 @@
   background: var(--color-paper);
 }
 
-.top-bar-title {
-  font-size: var(--font-size-small);
+.top-bar-live {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-hair);
+  flex: 0 0 auto;
+  font-size: var(--font-size-caption);
   font-weight: var(--font-weight-bold);
-  letter-spacing: -0.01em;
+  letter-spacing: 0.09em;
+}
+
+.top-bar-pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-ink);
 }
 
 .top-bar-meta {
-  margin-left: auto;
   font-size: var(--font-size-caption);
   font-variant-numeric: tabular-nums;
   color: var(--color-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-@media (max-width: 40rem) {
+.top-bar-actions {
+  display: flex;
+  gap: var(--space-tight);
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 52rem) {
   .top-bar {
     padding: var(--space-tight) var(--space-base);
   }
