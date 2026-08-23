@@ -1,0 +1,141 @@
+.grade-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--gap-loose);
+  align-items: center;
+  padding: var(--gap-loose);
+  border-radius: var(--radius-soft);
+  border: 1px solid var(--line-hair);
+  background: var(--surface-raised);
+}
+
+.grade-card-ring {
+  width: 128px;
+  height: 128px;
+  flex: 0 0 128px;
+}
+
+.grade-card-track {
+  stroke: var(--line-hair);
+}
+
+.grade-card-arc {
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  transition: stroke-dashoffset 600ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.grade-card-letter {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-anchor: middle;
+}
+
+.grade-card-scale {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-anchor: middle;
+  fill: var(--text-muted);
+}
+
+.grade-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-tight);
+  min-width: 0;
+}
+
+.grade-card-verdict {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.grade-card-summary {
+  font-size: var(--type-body);
+  color: var(--text-body);
+  max-width: 44ch;
+}
+
+.grade-card-market {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.grade-card--safe {
+  border-color: color-mix(in srgb, var(--signal-calm) 32%, transparent);
+  background: linear-gradient(
+    180deg,
+    var(--signal-calm-wash),
+    var(--surface-raised) 70%
+  );
+}
+
+.grade-card--safe .grade-card-verdict,
+.grade-card--safe .grade-card-letter {
+  color: var(--signal-calm);
+  fill: var(--signal-calm);
+}
+
+.grade-card--safe .grade-card-arc {
+  stroke: var(--signal-calm);
+}
+
+.grade-card--caution {
+  border-color: color-mix(in srgb, var(--signal-watch) 32%, transparent);
+  background: linear-gradient(
+    180deg,
+    var(--signal-watch-wash),
+    var(--surface-raised) 70%
+  );
+}
+
+.grade-card--caution .grade-card-verdict,
+.grade-card--caution .grade-card-letter {
+  color: var(--signal-watch);
+  fill: var(--signal-watch);
+}
+
+.grade-card--caution .grade-card-arc {
+  stroke: var(--signal-watch);
+}
+
+.grade-card--unsafe {
+  border-color: color-mix(in srgb, var(--signal-alarm) 32%, transparent);
+  background: linear-gradient(
+    180deg,
+    var(--signal-alarm-wash),
+    var(--surface-raised) 70%
+  );
+}
+
+.grade-card--unsafe .grade-card-verdict,
+.grade-card--unsafe .grade-card-letter {
+  color: var(--signal-alarm);
+  fill: var(--signal-alarm);
+}
+
+.grade-card--unsafe .grade-card-arc {
+  stroke: var(--signal-alarm);
+}
+
+@media (max-width: 44rem) {
+  .grade-card {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .grade-card-ring {
+    width: 96px;
+    height: 96px;
+  }
+}
